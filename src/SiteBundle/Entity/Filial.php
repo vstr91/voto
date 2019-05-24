@@ -184,4 +184,9 @@ class Filial {
     {
         return $this->dataCadastro;
     }
+    
+    public function __toString() {
+        return $this->getNome();
+    }
+    
 }

@@ -36,7 +36,8 @@
         "jms/serializer-bundle": "^2.4.1",
         "hwi/oauth-bundle": "0.6.3",
         "php-http/socket-client": "^1.0",
-        "google/apiclient": "dev-master"
+        "google/apiclient": "dev-master",
+        "doctrine/doctrine-fixtures-bundle": "3.0"
     },
     "require-dev": {
         "sensio/generator-bundle": "^3.0",

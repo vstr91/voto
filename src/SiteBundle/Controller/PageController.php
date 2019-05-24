@@ -11,8 +11,9 @@ class PageController extends Controller
     {
         $entrada = new Entrada();
         
-        $form = $this->createFormBuilder($entrada)
-            ->getForm();
+        $form = $this->createForm(\SiteBundle\Form\EntradaType::class, $entrada, [
+            'action' => '/teste'
+            ]);
         
         return $this->render('@Site/Page/index.html.twig', [
             "form" => $form->createView()

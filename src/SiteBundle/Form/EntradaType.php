@@ -13,19 +13,39 @@ class EntradaType extends AbstractType
      */
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
-        $builder->add('nome')
-                ->add('cpf')
-                ->add('dataNascimento')
-                ->add('telefone')
-                ->add('nomeResponsavel')
-                ->add('cpfResponsavel')
-                ->add('estudaIngles', ChoiceType::class, [
+        $builder->add('nome', null, [
+            'label' => 'Nome'
+        ])
+                ->add('cpf', null, [
+            'label' => 'CPF'
+        ])
+                ->add('dataNascimento', null, [
+            'label' => 'Data de Nascimento',
+            'widget' => 'single_text',
+            'input'  => 'datetime'
+        ])
+                ->add('telefone', null, [
+            'label' => 'Telefone'
+        ])
+                ->add('nomeResponsavel', null, [
+            'label' => 'Nome do Responsável'
+        ])
+                ->add('cpfResponsavel', null, [
+            'label' => 'CPF do Responsável'
+        ])
+                ->add('estudaIngles', \Symfony\Component\Form\Extension\Core\Type\ChoiceType::class, [
+                    'label' => 'Estuda Inglês?',
                     'choices' => [
                         'Sim' => true, 
                         'Não' => false
                         ]
                     ])
-                ->add('frase')->add('filial');
+                ->add('frase', null, [
+            'label' => 'Escreva sua Frase!'
+        ])
+                ->add('filial', null, [
+            'label' => 'Cidade Mais Próxima'
+        ]);
     }/**
      * {@inheritdoc}
      */
