@@ -57,7 +57,7 @@ class Entrada {
     private $cpf;
     
     /**
-     * @ORM\Column(type="datetime")
+     * @ORM\Column(type="string", length=10)
      */
     protected $dataNascimento;
     

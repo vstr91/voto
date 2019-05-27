@@ -2,7 +2,11 @@
 
 namespace SiteBundle\Form;
 
+use Doctrine\ORM\EntityRepository;
+use SiteBundle\Entity\Filial;
+use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
@@ -17,34 +21,51 @@ class EntradaType extends AbstractType
             'label' => 'Nome'
         ])
                 ->add('cpf', null, [
-            'label' => 'CPF'
+            'label' => 'CPF',
+            'attr' => [
+                'class' => 'cpf'
+            ]
         ])
                 ->add('dataNascimento', null, [
             'label' => 'Data de Nascimento',
-            'widget' => 'single_text',
-            'input'  => 'datetime'
+            'attr' => [
+                'class' => 'datepicker'
+            ]
         ])
                 ->add('telefone', null, [
-            'label' => 'Telefone'
+            'label' => 'Telefone',
+            'attr' => [
+                'class' => 'telefone'
+            ]
         ])
                 ->add('nomeResponsavel', null, [
             'label' => 'Nome do Responsável'
         ])
                 ->add('cpfResponsavel', null, [
-            'label' => 'CPF do Responsável'
+            'label' => 'CPF do Responsável',
+            'attr' => [
+                'class' => 'cpf'
+            ]
         ])
-                ->add('estudaIngles', \Symfony\Component\Form\Extension\Core\Type\ChoiceType::class, [
+                ->add('estudaIngles', ChoiceType::class, [
                     'label' => 'Estuda Inglês?',
                     'choices' => [
+                        'Estuda Inglês?' => null,
                         'Sim' => true, 
                         'Não' => false
                         ]
                     ])
                 ->add('frase', null, [
-            'label' => 'Escreva sua Frase!'
+            'label' => 'O que você faria para ganhar um intercâmbio para Toronto?'
         ])
-                ->add('filial', null, [
-            'label' => 'Cidade Mais Próxima'
+                ->add('filial', EntityType::class, [
+            'label' => 'Cidade Mais Próxima',
+            'class' => Filial::class,
+            'query_builder' => function (EntityRepository $er) {
+                return $er->createQueryBuilder('f')
+                    ->orderBy('f.id', 'ASC');
+            },
+            'choice_label' => 'nome'
         ]);
     }/**
      * {@inheritdoc}

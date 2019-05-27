@@ -1,5 +1,93 @@
-{{ form_start(form) }}
-    {{ form_widget(form) }}
+{% extends "base.html.twig" %}
+{% block body %}
+    <div class="container">
+        <div class="row">
+            <div class="col-8 offset-2">
+                <form name="form" id="form" method="POST" 
+                      action="{{ path('site_processa_formulario') }}">
+                    {{ form_start(form) }}
+                    <div class="my-custom-class-for-errors">
+                        {{ form_errors(form) }}
+                    </div>
 
-    <input type="submit"/>
-{{ form_end(form) }}
+                    <div class="row">
+                        <div class="col-6">
+                            {{ form_widget(form.nome, {'attr': {'placeholder': 'Nome'}}) }}
+                        </div>
+                        <div class="col-6">
+                            {{ form_widget(form.cpf, {'attr': {'placeholder': 'CPF'}}) }}
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-6">
+                            {{ form_widget(form.dataNascimento, {'attr': {'placeholder': 'Data de Nascimento'}}) }}
+                        </div>
+                        <div class="col-6">
+                            {{ form_widget(form.telefone, {'attr': {'placeholder': 'Telefone'}}) }}
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-6">
+                            {{ form_widget(form.nomeResponsavel, {'attr': {'placeholder': 'Nome do Responsável'}}) }}
+                        </div>
+                        <div class="col-6">
+                            {{ form_widget(form.cpfResponsavel, {'attr': {'placeholder': 'CPF do Responsável'}}) }}
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-6">
+                            {{ form_widget(form.filial, {'attr': {'placeholder': 'Cidade Mais Próxima'}}) }}
+                        </div>
+                        <div class="col-6">
+                            {{ form_widget(form.estudaIngles, {'attr': {'placeholder': 'Estuda Inglês?'}}) }}
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-12">
+                            {{ form_row(form.frase) }}
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-8">
+                            <input type="checkbox" />
+                            <label>Estou de acordo com o regulamento</label>
+                        </div>
+                        <div class="col-4">
+                            <input type="submit" value="Cadastrar" class="btn btn-primary float-right" />
+                        </div>
+                    </div>
+                    {{ form_end(form) }}
+                </form>
+                <p>Regulamento: </p>
+            </div>
+        </div>
+    </div>
+{% endblock body %}
+{% block javascripts %}
+    {{ parent() }}
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.8.0/css/bootstrap-datepicker.css" />
+    <script type="text/javascript" src="{{ asset('js/jquery.mask.min.js') }}"></script>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.8.0/js/bootstrap-datepicker.min.js"></script>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.8.0/locales/bootstrap-datepicker.pt-BR.min.js"></script>
+    
+    <script>
+          var SPMaskBehavior = function (val) {
+            return val.replace(/\D/g, '').length === 11 ? '(00) 00000-0000' : '(00) 0000-00009';
+          },
+          spOptions = {
+            onKeyPress: function(val, e, field, options) {
+                field.mask(SPMaskBehavior.apply({}, arguments), options);
+              }
+          };
+        
+        $(document).ready(function(){
+            $('.cpf').mask('000.000.000-00', {reverse: true});
+            $('.telefone').mask(SPMaskBehavior, spOptions);
+            
+            $('.datepicker').datepicker({
+                language: 'pt-BR',
+                startDate: '-16y'
+            });
+        });
+    </script>
+{% endblock javascripts %}

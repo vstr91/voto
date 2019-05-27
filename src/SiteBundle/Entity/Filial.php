@@ -33,9 +33,9 @@ class Filial {
     /**
      * @var integer
      *
-     * @ORM\Column(name="id")
+     * @ORM\Column(name="id", type="integer")
      * @ORM\Id
-     * @ORM\GeneratedValue(strategy="UUID")
+     * @ORM\GeneratedValue(strategy="AUTO")
      * 
      */
     protected $id;
