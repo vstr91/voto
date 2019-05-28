@@ -56,7 +56,10 @@ class EntradaType extends AbstractType
                         ]
                     ])
                 ->add('frase', null, [
-            'label' => 'O que você faria para ganhar um intercâmbio para Toronto?'
+            'label' => 'O que você faria para ganhar um intercâmbio para Toronto?',
+            'attr' => [
+                'rows' => 5
+            ]
         ])
                 ->add('filial', EntityType::class, [
             'label' => 'Cidade Mais Próxima',
