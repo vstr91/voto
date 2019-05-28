@@ -13,3 +13,13 @@ and open the template in the editor.
     margin-bottom: 5px;
     border-radius: 20px !important;
 }
+
+.error, #erroCheck{
+    color: red;
+    font-weight: bold;
+}
+
+input.error, textarea.error, select.error{
+    border: red 1px solid;
+    color: #495057;
+}

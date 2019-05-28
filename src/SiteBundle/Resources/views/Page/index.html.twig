@@ -7,9 +7,8 @@
         </div>
         <div class="row">
             <div class="col-8 offset-2">
-                <form name="form" id="form" method="POST" 
+                <form name="form-entrada" id="form-entrada" method="POST" 
                       action="{{ path('site_processa_formulario') }}">
-                    {{ form_start(form) }}
                     <div class="my-custom-class-for-errors">
                         {{ form_errors(form) }}
                     </div>
@@ -53,8 +52,9 @@
                     </div>
                     <div class="row">
                         <div class="col-8">
-                            <input type="checkbox" />
-                            <label>Estou de acordo com o regulamento</label>
+                            <input type="checkbox" name="checkRegulamento" id="checkRegulamento" />
+                            <label for="checkRegulamento">Estou de acordo com o regulamento</label> <br />
+                            <span id="erroCheck"></span>
                         </div>
                         <div class="col-4">
                             <input type="submit" value="Cadastrar" class="btn btn-primary float-right" />
@@ -72,27 +72,109 @@
     <link rel="stylesheet" href="{{ asset('css/estilos.css') }}" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.8.0/css/bootstrap-datepicker.css" />
     <script type="text/javascript" src="{{ asset('js/jquery.mask.min.js') }}"></script>
+    <script type="text/javascript" src="{{ asset('js/jquery.form.min.js') }}"></script>
+    <script type="text/javascript" src="{{ asset('js/jquery.validate.min.js') }}"></script>
+    <script type="text/javascript" src="{{ asset('js/additional-methods.min.js') }}"></script>
     <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.8.0/js/bootstrap-datepicker.min.js"></script>
     <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.8.0/locales/bootstrap-datepicker.pt-BR.min.js"></script>
-    
+
     <script>
-          var SPMaskBehavior = function (val) {
+        var SPMaskBehavior = function (val) {
             return val.replace(/\D/g, '').length === 11 ? '(00) 00000-0000' : '(00) 0000-00009';
-          },
-          spOptions = {
-            onKeyPress: function(val, e, field, options) {
-                field.mask(SPMaskBehavior.apply({}, arguments), options);
-              }
-          };
-        
-        $(document).ready(function(){
+        },
+                spOptions = {
+                    onKeyPress: function (val, e, field, options) {
+                        field.mask(SPMaskBehavior.apply({}, arguments), options);
+                    }
+                };
+
+        $(document).ready(function () {
             $('.cpf').mask('000.000.000-00', {reverse: true});
             $('.telefone').mask(SPMaskBehavior, spOptions);
-            
+
             $('.datepicker').datepicker({
                 language: 'pt-BR',
-                startDate: '-16y'
+                endDate: '-16y'
             });
+
+            $('#form-entrada').validate({
+                submitHandler: function (form) {
+                    $(form).ajaxSubmit({
+                        success: function (response, status, xhr, form) {
+                           
+                            if(response == '0'){
+                                alert('Frase cadastrada com sucesso!');
+                                location.reload();
+                            } else{
+                                alert(response);
+                            }
+                            
+                            
+                        }
+                    });
+
+                    return false;
+
+                },
+                rules: {
+                    'sitebundle_entrada[nome]': 'required',
+                    'sitebundle_entrada[cpf]': {
+                        required: true,
+                        cpfBR: true
+                    },
+                    'sitebundle_entrada[dataNascimento]': 'required',
+                    'sitebundle_entrada[telefone]': {
+                        required: true
+                    },
+                    'sitebundle_entrada[nomeResponsavel]': 'required',
+                    'sitebundle_entrada[cpfResponsavel]': {
+                        required: true,
+                        cpfBR: true
+                    },
+                    'sitebundle_entrada[filial]': {
+                        //greaterThan: 0
+                    },
+                    'sitebundle_entrada[estudaIngles]': {
+                        //greaterThan: 0
+                    },
+                    'sitebundle_entrada[frase]': 'required',
+                    'checkRegulamento': 'required'
+                },
+                messages: {
+                    'sitebundle_entrada[nome]': 'Informe seu nome completo',
+                    'sitebundle_entrada[cpf]': {
+                        required: "Informe seu CPF",
+                        cpfBR: "Informe um CPF válido"
+                    },
+                    'sitebundle_entrada[dataNascimento]': 'Informe sua data de nascimento',
+                    'sitebundle_entrada[telefone]': {
+                        required: "Informe um telefone para contato"
+                    },
+                    'sitebundle_entrada[nomeResponsavel]': 'Informe o nome do responsável',
+                    'sitebundle_entrada[cpfResponsavel]': {
+                        required: "Informe seu CPF",
+                        cpfBR: "Informe um CPF válido"
+                    },
+                    'sitebundle_entrada[filial]': {
+                        greaterThan: "Escolha a cidade mais próxima"
+                    },
+                    'sitebundle_entrada[estudaIngles]': {
+                        greaterThan: "Escolha uma opção acima"
+                    },
+                    'sitebundle_entrada[frase]': 'Digite a sua frase acima!',
+                    'checkRegulamento': 'required'
+                },
+                errorPlacement: function(error, element) {
+                    
+                    if (element.attr("name") == "checkRegulamento" ) {
+                        $("#erroCheck").text("É necessário concordar com os termos do regulamento.");
+                    } else{
+                        error.insertAfter(element);
+                    }
+                    
+                }
+            });
+
         });
     </script>
 {% endblock javascripts %}
