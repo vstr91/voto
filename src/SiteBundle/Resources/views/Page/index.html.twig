@@ -96,6 +96,10 @@
                 language: 'pt-BR',
                 endDate: '-16y'
             });
+            
+            jQuery.validator.addMethod("maiorQueZero", function (value, element) {
+                    return this.optional(element) || (parseFloat(value) > 0);
+                }, "Valor deve ser maior que zero");
 
             $('#form-entrada').validate({
                 submitHandler: function (form) {
@@ -132,10 +136,12 @@
                         cpfBR: true
                     },
                     'sitebundle_entrada[filial]': {
-                        //greaterThan: 0
+                        required: true,
+                        maiorQueZero: true
                     },
                     'sitebundle_entrada[estudaIngles]': {
-                        //greaterThan: 0
+                        required: true,
+                        maiorQueZero: true
                     },
                     'sitebundle_entrada[frase]': 'required',
                     'checkRegulamento': 'required'
@@ -156,10 +162,12 @@
                         cpfBR: "Informe um CPF válido"
                     },
                     'sitebundle_entrada[filial]': {
-                        greaterThan: "Escolha a cidade mais próxima"
+                        required: "Escolha a cidade mais próxima",
+                        maiorQueZero: "Escolha a cidade mais próxima"
                     },
                     'sitebundle_entrada[estudaIngles]': {
-                        greaterThan: "Escolha uma opção acima"
+                        required: "Escolha uma opção acima",
+                        maiorQueZero: "Escolha uma opção acima"
                     },
                     'sitebundle_entrada[frase]': 'Digite a sua frase acima!',
                     'checkRegulamento': 'required'
