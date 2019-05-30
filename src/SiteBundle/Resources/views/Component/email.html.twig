@@ -1,0 +1,11 @@
+{# empty Twig template #}
+<p>Frase enviada por <strong>{{ nome }}</strong> &agrave;s 
+    <strong>{{ "now" | date("d/m/Y H:i") }}</strong>.</p>
+
+<p><strong>CPF:</strong> {{ cpf }}</p>
+<p><strong>Data de Nascimento:</strong> {{ dataNascimento }}</p>
+<p><strong>Telefone:</strong> {{ telefone }}</p>
+<p><strong>Respons&aacute;vel:</strong> {{ responsavel ~ '(' ~ cpfResponsavel ~ ')' }}</p>
+<p><strong>Estuda ingl&ecirc;s?:</strong> {{ estudaIngles }}</p>
+<p><strong>Frase:</strong></p>
+<p>{{ frase }}</p>

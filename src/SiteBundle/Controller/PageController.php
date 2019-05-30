@@ -59,6 +59,11 @@ class PageController extends Controller {
             $entityManager = $this->getDoctrine()->getManager();
             $entityManager->persist($entrada);
             $entityManager->flush();
+            
+            $filial = $em->getRepository('SiteBundle:Filial')
+                    ->findOneBy(array('id' => $entrada->getFilial()));
+            
+            $this->enviarEmail("Email Frase", $filial->getEmail(), $filial->getEmail(), $entrada);
 
             return new \Symfony\Component\HttpFoundation\Response('0');
         }
@@ -113,4 +118,27 @@ class PageController extends Controller {
         }
     }
 
+    function enviarEmail($titulo, $remetente, $destinatario, Entrada $entrada){
+        $email = \Swift_Message::newInstance()
+                        ->setSubject($titulo)
+                        ->setFrom($remetente)
+                        ->setTo($destinatario)
+                        ->setBody($this->renderView('@Site/Component/email.html.twig', 
+                                array(
+                                    'nome' => $titulo,
+                                    'cpf' => $entrada->getCpf(),
+                                    'dataNascimento' => $entrada->getDataNascimento(),
+                                    'telefone' => $entrada->getTelefone(),
+                                    'responsavel' => $entrada->getNomeResponsavel(),
+                                    'cpfResponsavel' => $entrada->getCpfResponsavel(),
+                                    'estudaIngles' => $entrada->getEstudaIngles() ? "Sim" : "Não",
+                                    'frase' => $entrada->getFrase()
+                                )
+                        ))
+                        ->setContentType("text/html");
+        
+                        //->setBody($form->get('mensagem')->getData());
+                $this->get('mailer')->send($email);
+    }
+    
 }
