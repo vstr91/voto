@@ -49,6 +49,13 @@ class Usuario extends BaseUser {
      * @ORM\Column(type="datetime")
      */
     protected $dataCadastro;
+    
+    /**
+     * @ORM\ManyToOne(targetEntity="Filial")
+     * @ORM\JoinColumn(name="filial", referencedColumnName="id")
+     * 
+     */
+    protected $filial;
  
     /**
      * @var string
@@ -239,5 +246,29 @@ class Usuario extends BaseUser {
     public function getUltimaAlteracao()
     {
         return $this->ultimaAlteracao;
+    }
+
+    /**
+     * Set filial
+     *
+     * @param \SiteBundle\Entity\Filial $filial
+     *
+     * @return Usuario
+     */
+    public function setFilial(\SiteBundle\Entity\Filial $filial = null)
+    {
+        $this->filial = $filial;
+
+        return $this;
+    }
+
+    /**
+     * Get filial
+     *
+     * @return \SiteBundle\Entity\Filial
+     */
+    public function getFilial()
+    {
+        return $this->filial;
     }
 }

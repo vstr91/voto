@@ -1,6 +1,14 @@
 site_homepage:
     path:     /
     defaults: { _controller: SiteBundle:Page:index }
+    
+site_admin_homepage:
+    path:     /admin
+    defaults: { _controller: SiteBundle:Admin:index }
+    
+site_admin_filial_homepage:
+    path:     /admin/{filial}/home
+    defaults: { _controller: SiteBundle:Admin:indexFilial, filial: '' }
 
 site_processa_formulario:
     path:     /processa-form

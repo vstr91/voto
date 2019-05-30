@@ -125,7 +125,7 @@ class PageController extends Controller {
                         ->setTo($destinatario)
                         ->setBody($this->renderView('@Site/Component/email.html.twig', 
                                 array(
-                                    'nome' => $titulo,
+                                    'nome' => $entrada->getNome(),
                                     'cpf' => $entrada->getCpf(),
                                     'dataNascimento' => $entrada->getDataNascimento(),
                                     'telefone' => $entrada->getTelefone(),

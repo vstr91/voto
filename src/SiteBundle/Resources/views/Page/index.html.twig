@@ -7,62 +7,67 @@
         </div>
         <div class="row">
             <div class="col-8 offset-2">
-                <form name="form-entrada" id="form-entrada" method="POST" 
-                      action="{{ path('site_processa_formulario') }}">
-                    <div class="my-custom-class-for-errors">
-                        {{ form_errors(form) }}
-                    </div>
+                {% if date("now"|date('Y-m-d')) < date('2019-04-31'|date('Y-m-d')) %}
+                    <form name="form-entrada" id="form-entrada" method="POST" 
+                          action="{{ path('site_processa_formulario') }}">
+                        <div class="my-custom-class-for-errors">
+                            {{ form_errors(form) }}
+                        </div>
 
-                    <div class="row">
-                        <div class="col-6">
-                            {{ form_widget(form.nome, {'attr': {'placeholder': 'Nome'}}) }}
+                        <div class="row">
+                            <div class="col-6">
+                                {{ form_widget(form.nome, {'attr': {'placeholder': 'Nome'}}) }}
+                            </div>
+                            <div class="col-6">
+                                {{ form_widget(form.cpf, {'attr': {'placeholder': 'CPF'}}) }}
+                            </div>
                         </div>
-                        <div class="col-6">
-                            {{ form_widget(form.cpf, {'attr': {'placeholder': 'CPF'}}) }}
+                        <div class="row">
+                            <div class="col-6">
+                                {{ form_widget(form.dataNascimento, {'attr': {'placeholder': 'Data de Nascimento'}}) }}
+                            </div>
+                            <div class="col-6">
+                                {{ form_widget(form.telefone, {'attr': {'placeholder': 'Telefone'}}) }}
+                            </div>
                         </div>
-                    </div>
-                    <div class="row">
-                        <div class="col-6">
-                            {{ form_widget(form.dataNascimento, {'attr': {'placeholder': 'Data de Nascimento'}}) }}
+                        <div class="row">
+                            <div class="col-6">
+                                {{ form_widget(form.nomeResponsavel, {'attr': {'placeholder': 'Nome do Responsável'}}) }}
+                            </div>
+                            <div class="col-6">
+                                {{ form_widget(form.cpfResponsavel, {'attr': {'placeholder': 'CPF do Responsável'}}) }}
+                            </div>
                         </div>
-                        <div class="col-6">
-                            {{ form_widget(form.telefone, {'attr': {'placeholder': 'Telefone'}}) }}
+                        <div class="row">
+                            <div class="col-6">
+                                {{ form_widget(form.filial, {'attr': {'placeholder': 'Cidade Mais Próxima'}}) }}
+                            </div>
+                            <div class="col-6">
+                                {{ form_widget(form.estudaIngles, {'attr': {'placeholder': 'Estuda Inglês?'}}) }}
+                            </div>
                         </div>
-                    </div>
-                    <div class="row">
-                        <div class="col-6">
-                            {{ form_widget(form.nomeResponsavel, {'attr': {'placeholder': 'Nome do Responsável'}}) }}
+                        <div class="row">
+                            <div class="col-12">
+                                {{ form_row(form.frase) }}
+                            </div>
                         </div>
-                        <div class="col-6">
-                            {{ form_widget(form.cpfResponsavel, {'attr': {'placeholder': 'CPF do Responsável'}}) }}
+                        <div class="row">
+                            <div class="col-8">
+                                <input type="checkbox" name="checkRegulamento" id="checkRegulamento" />
+                                <label for="checkRegulamento">Estou de acordo com o regulamento</label> <br />
+                                <span id="erroCheck"></span>
+                            </div>
+                            <div class="col-4">
+                                <input type="submit" value="Enviar" class="btn botao-branco float-right" id="btn-enviar" />
+                            </div>
                         </div>
-                    </div>
-                    <div class="row">
-                        <div class="col-6">
-                            {{ form_widget(form.filial, {'attr': {'placeholder': 'Cidade Mais Próxima'}}) }}
-                        </div>
-                        <div class="col-6">
-                            {{ form_widget(form.estudaIngles, {'attr': {'placeholder': 'Estuda Inglês?'}}) }}
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="col-12">
-                            {{ form_row(form.frase) }}
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="col-8">
-                            <input type="checkbox" name="checkRegulamento" id="checkRegulamento" />
-                            <label for="checkRegulamento">Estou de acordo com o regulamento</label> <br />
-                            <span id="erroCheck"></span>
-                        </div>
-                        <div class="col-4">
-                            <input type="submit" value="Cadastrar" class="btn botao-branco float-right" />
-                        </div>
-                    </div>
-                    {{ form_end(form) }}
-                </form>
-                <p>Regulamento: </p>
+                        {{ form_end(form) }}
+                    </form>
+                    <p>Regulamento: </p>
+                {% else %}
+                    <p>O prazo se encerrou...</p>
+                {% endif %}
+
             </div>
         </div>
     </div>
@@ -96,24 +101,30 @@
                 language: 'pt-BR',
                 endDate: '-16y'
             });
-            
+
             jQuery.validator.addMethod("maiorQueZero", function (value, element) {
-                    return this.optional(element) || (parseFloat(value) > 0);
-                }, "Valor deve ser maior que zero");
+                return this.optional(element) || (parseFloat(value) > 0);
+            }, "Valor deve ser maior que zero");
 
             $('#form-entrada').validate({
                 submitHandler: function (form) {
+
+                    $('#btn-enviar').attr('disabled', 'disabled');
+                    $('#btn-enviar').val("Enviando frase...");
+
                     $(form).ajaxSubmit({
                         success: function (response, status, xhr, form) {
-                           
-                            if(response == '0'){
-                                alert('Frase cadastrada com sucesso!');
+
+                            if (response == '0') {
+                                alert('Frase enviada com sucesso! Boa sorte!');
                                 location.reload();
-                            } else{
+                            } else {
                                 alert(response);
                             }
-                            
-                            
+
+                            $('#btn-enviar').removeAttr('disabled');
+                            $('#btn-enviar').val("Enviar");
+
                         }
                     });
 
@@ -172,14 +183,14 @@
                     'sitebundle_entrada[frase]': 'Digite a sua frase acima!',
                     'checkRegulamento': 'required'
                 },
-                errorPlacement: function(error, element) {
-                    
-                    if (element.attr("name") == "checkRegulamento" ) {
+                errorPlacement: function (error, element) {
+
+                    if (element.attr("name") == "checkRegulamento") {
                         $("#erroCheck").text("É necessário concordar com os termos do regulamento.");
-                    } else{
+                    } else {
                         error.insertAfter(element);
                     }
-                    
+
                 }
             });
 

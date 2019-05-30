@@ -59,6 +59,14 @@ class Filial {
     private $email;
     
     /**
+     * @var string
+     *
+     * @ORM\Column(name="slug", type="string", length=100, unique=false)
+     * 
+     */
+    private $slug;
+    
+    /**
      * @ORM\Column(type="boolean")
      * 
      */
@@ -189,4 +197,28 @@ class Filial {
         return $this->getNome();
     }
     
+
+    /**
+     * Set slug
+     *
+     * @param string $slug
+     *
+     * @return Filial
+     */
+    public function setSlug($slug)
+    {
+        $this->slug = $slug;
+
+        return $this;
+    }
+
+    /**
+     * Get slug
+     *
+     * @return string
+     */
+    public function getSlug()
+    {
+        return $this->slug;
+    }
 }

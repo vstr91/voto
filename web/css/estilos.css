@@ -9,6 +9,7 @@ and open the template in the editor.
 */
 
 body{
+    background-color: purple !important;
     color: white;
 }
 

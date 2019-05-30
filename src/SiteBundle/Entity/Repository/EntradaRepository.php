@@ -10,4 +10,32 @@ namespace SiteBundle\Entity\Repository;
  */
 class EntradaRepository extends \Doctrine\ORM\EntityRepository
 {
+    
+    public function listarTodos($limite = null){
+        $qb = $this->createQueryBuilder('e')
+                ->select('e')
+                ->distinct()
+                ->addOrderBy('e.dataCadastro', 'DESC');
+        
+        if(false == is_null($limite)){
+            $qb->setMaxResults($limite);
+        }
+        
+        return $qb->getQuery()->getResult();
+        
+    }
+    
+    public function listarTodosPorFilial($filial){
+        $qb = $this->createQueryBuilder('e')
+                ->select('e')
+                ->innerJoin('SiteBundle:Filial', 'f', 'WITH', 'e.filial = f.id')
+                ->distinct()
+                ->where('f.slug = :filial')
+                ->setParameter('filial', $filial)
+                ->addOrderBy('e.dataCadastro', 'DESC');
+        
+        return $qb->getQuery()->getResult();
+        
+    }
+    
 }
