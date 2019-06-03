@@ -2,6 +2,10 @@ site_homepage:
     path:     /
     defaults: { _controller: SiteBundle:Page:index }
     
+site_voto:
+    path:     /voto
+    defaults: { _controller: SiteBundle:Page:voto }
+    
 site_admin_homepage:
     path:     /admin
     defaults: { _controller: SiteBundle:Admin:index }

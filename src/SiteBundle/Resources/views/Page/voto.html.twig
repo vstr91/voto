@@ -7,65 +7,14 @@
         </div>
         <div class="row">
             <div class="col-8 offset-2">
-                {% if date("now"|date('Y-m-d')) < date('2019-08-31'|date('Y-m-d')) %}
-                    <form name="form-entrada" id="form-entrada" method="POST" 
-                          action="{{ path('site_processa_formulario') }}">
-                        <div class="my-custom-class-for-errors">
-                            {{ form_errors(form) }}
-                        </div>
-
-                        <div class="row">
-                            <div class="col-6">
-                                {{ form_widget(form.nome, {'attr': {'placeholder': 'Nome'}}) }}
-                            </div>
-                            <div class="col-6">
-                                {{ form_widget(form.cpf, {'attr': {'placeholder': 'CPF'}}) }}
-                            </div>
-                        </div>
-                        <div class="row">
-                            <div class="col-6">
-                                {{ form_widget(form.dataNascimento, {'attr': {'placeholder': 'Data de Nascimento'}}) }}
-                            </div>
-                            <div class="col-6">
-                                {{ form_widget(form.telefone, {'attr': {'placeholder': 'Telefone'}}) }}
-                            </div>
-                        </div>
-                        <div class="row">
-                            <div class="col-6">
-                                {{ form_widget(form.nomeResponsavel, {'attr': {'placeholder': 'Nome do Responsável'}}) }}
-                            </div>
-                            <div class="col-6">
-                                {{ form_widget(form.cpfResponsavel, {'attr': {'placeholder': 'CPF do Responsável'}}) }}
-                            </div>
-                        </div>
-                        <div class="row">
-                            <div class="col-6">
-                                {{ form_widget(form.filial, {'attr': {'placeholder': 'Cidade Mais Próxima'}}) }}
-                            </div>
-                            <div class="col-6">
-                                {{ form_widget(form.estudaIngles, {'attr': {'placeholder': 'Estuda Inglês?'}}) }}
-                            </div>
-                        </div>
-                        <div class="row">
-                            <div class="col-12">
-                                {{ form_row(form.frase) }}
-                            </div>
-                        </div>
-                        <div class="row">
-                            <div class="col-8">
-                                <input type="checkbox" name="checkRegulamento" id="checkRegulamento" />
-                                <label for="checkRegulamento">Estou de acordo com o regulamento</label> <br />
-                                <span id="erroCheck"></span>
-                            </div>
-                            <div class="col-4">
-                                <input type="submit" value="Enviar" class="btn botao-branco float-right" id="btn-enviar" />
-                            </div>
-                        </div>
-                        {{ form_end(form) }}
-                    </form>
-                    <p>Regulamento: </p>
+                {% if date("now"|date('Y-m-d')) > date('2019-04-31'|date('Y-m-d')) %}
+                    
+                    {% for e in entradas %}
+                        
+                    {% endfor %}
+                    
                 {% else %}
-                    <p>O prazo se encerrou... Em breve as pr&oacute;ximas etapas!</p>
+                    <p>A vota&ccedil;&atilde;o ainda n&atilde;o foi iniciada...</p>
                 {% endif %}
 
             </div>

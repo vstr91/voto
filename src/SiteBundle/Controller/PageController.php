@@ -18,6 +18,17 @@ class PageController extends Controller {
                     "form" => $form->createView()
         ]);
     }
+    
+    public function votoAction() {
+        
+        $em = $this->getDoctrine()->getManager();
+        
+        $entradas = $em->getRepository('SiteBundle:Entrada')->listarTodosParaVotacao();
+
+        return $this->render('@Site/Page/voto.html.twig', [
+                    "entradas" => $entradas
+        ]);
+    }
 
     public function processaFormAction(\Symfony\Component\HttpFoundation\Request $request) {
 

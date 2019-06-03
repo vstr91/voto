@@ -15,6 +15,7 @@ class EntradaRepository extends \Doctrine\ORM\EntityRepository
         $qb = $this->createQueryBuilder('e')
                 ->select('e')
                 ->distinct()
+                ->addOrderBy('e.filial', 'ASC')
                 ->addOrderBy('e.dataCadastro', 'DESC');
         
         if(false == is_null($limite)){
@@ -32,6 +33,18 @@ class EntradaRepository extends \Doctrine\ORM\EntityRepository
                 ->distinct()
                 ->where('f.slug = :filial')
                 ->setParameter('filial', $filial)
+                ->addOrderBy('e.dataCadastro', 'DESC');
+        
+        return $qb->getQuery()->getResult();
+        
+    }
+    
+    public function listarTodosParaVotacao(){
+        $qb = $this->createQueryBuilder('e')
+                ->select('e')
+                ->distinct()
+                ->andWhere('e.escolhida = 1')
+                ->andWhere('e.ativo = 1')
                 ->addOrderBy('e.dataCadastro', 'DESC');
         
         return $qb->getQuery()->getResult();
