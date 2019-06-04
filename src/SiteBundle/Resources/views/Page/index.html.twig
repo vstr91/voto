@@ -1,11 +1,17 @@
 {% extends "base.html.twig" %}
 {% block body %}
+    <div id="rounded" style="background-color: #9933cc; border-radius: 0 800px 800px 0; 
+         height: 40%; max-height: 100%; width: 70%; position: absolute; 
+         left: 0; margin-bottom: 50px;"></div>
     <div class="container">
         <div class="row">
-            <div class="col-md-8 offset-2" style="background-color: #DD00AA;
-                 width: 100%; height: 200px; margin-top: 20px; margin-bottom: 20px;"></div>
+            <div id="topo" class="col-md-8 offset-2" style="max-height: 200px; 
+                 height: auto; margin-top: 30px; 
+                 margin-bottom: 40px">
+                <img src="{{ asset('imagens/topo.png') }}" style="height: 100%" />
+            </div>
         </div>
-        <div class="row">
+        <div class="row" id="row-form">
             <div class="col-8 offset-2">
                 {% if date("now"|date('Y-m-d')) < date('2019-08-31'|date('Y-m-d')) %}
                     <form name="form-entrada" id="form-entrada" method="POST" 
@@ -63,7 +69,15 @@
                         </div>
                         {{ form_end(form) }}
                     </form>
-                    <p>Regulamento: </p>
+                    <br />
+                    <p style="font-size: 10pt; text-align: justify">Regulamento: Lorem ipsum dolor sit amet, consectetur adipiscing elit. 
+                        Aliquam eu urna fringilla ex volutpat maximus. Quisque nec lobortis leo, ut sollicitudin orci. 
+                        Duis faucibus, leo at bibendum convallis, augue dolor placerat nisi, 
+                        in commodo enim dui in ex. Sed non est faucibus, sagittis lectus id, volutpat mi. 
+                        Pellentesque congue, purus maximus vulputate ultrices, felis lectus sollicitudin tellus, 
+                        non elementum sapien nunc in velit. Sed a metus turpis. Suspendisse egestas pulvinar sapien, 
+                        vel venenatis nibh lacinia egestas. Aliquam sem felis, consequat sed semper ut, 
+                        interdum cursus dolor.</p>
                 {% else %}
                     <p>O prazo se encerrou... Em breve as pr&oacute;ximas etapas!</p>
                 {% endif %}
@@ -193,6 +207,11 @@
 
                 }
             });
+            
+            $('#rounded').css('height', ($('#row-form').css('height')-50));
+            $('#rounded').css('top', $('#row-form').position().top-20);
+            
+            $('#topo').css('width', ($('#row-form').css('width')));
 
         });
     </script>

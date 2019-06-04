@@ -18,7 +18,7 @@ class EntradaType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder->add('nome', null, [
-            'label' => 'Nome'
+            'label' => 'Nome Completo'
         ])
                 ->add('cpf', null, [
             'label' => 'CPF',
@@ -56,7 +56,7 @@ class EntradaType extends AbstractType
                         ]
                     ])
                 ->add('frase', null, [
-            'label' => 'O que você faria para ganhar um intercâmbio para Toronto?',
+            'label' => ' ',
             'attr' => [
                 'rows' => 5
             ]

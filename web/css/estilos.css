@@ -9,7 +9,7 @@ and open the template in the editor.
 */
 
 body{
-    background-color: purple !important;
+    background-color: #91be00 !important;
     color: white;
 }
 
@@ -20,7 +20,7 @@ body{
 }
 
 .error, #erroCheck{
-    color: red;
+    color: #FFF;
     font-weight: bold;
 }
 
