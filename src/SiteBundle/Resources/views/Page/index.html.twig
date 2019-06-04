@@ -1,13 +1,11 @@
 {% extends "base.html.twig" %}
 {% block body %}
     <div id="rounded" style="background-color: #9933cc; border-radius: 0 800px 800px 0; 
-         height: 40%; max-height: 100%; width: 70%; position: absolute; 
+         height: 10%; max-height: 80%; width: 70%; position: absolute; 
          left: 0; margin-bottom: 50px;"></div>
     <div class="container">
         <div class="row">
-            <div id="topo" class="col-md-8 offset-2" style="max-height: 200px; 
-                 height: auto; margin-top: 30px; 
-                 margin-bottom: 40px">
+            <div id="topo" class="col-md-8 offset-2" style="height: auto; margin-top: 30px; margin-bottom: 30px">
                 <img src="{{ asset('imagens/topo.png') }}" style="height: 100%" />
             </div>
         </div>
@@ -78,7 +76,7 @@
                         non elementum sapien nunc in velit. Sed a metus turpis. Suspendisse egestas pulvinar sapien, 
                         vel venenatis nibh lacinia egestas. Aliquam sem felis, consequat sed semper ut, 
                         interdum cursus dolor.</p>
-                {% else %}
+                    {% else %}
                     <p>O prazo se encerrou... Em breve as pr&oacute;ximas etapas!</p>
                 {% endif %}
 
@@ -106,6 +104,17 @@
                         field.mask(SPMaskBehavior.apply({}, arguments), options);
                     }
                 };
+
+        function getOffset(el) {
+            var _x = 0;
+            var _y = 0;
+            while (el && !isNaN(el.offsetLeft) && !isNaN(el.offsetTop)) {
+                _x += el.offsetLeft - el.scrollLeft;
+                _y += el.offsetTop - el.scrollTop;
+                el = el.offsetParent;
+            }
+            return {top: _y, left: _x};
+        }
 
         $(document).ready(function () {
             $('.cpf').mask('000.000.000-00', {reverse: true});
@@ -207,12 +216,18 @@
 
                 }
             });
-            
-            $('#rounded').css('height', ($('#row-form').css('height')-50));
-            $('#rounded').css('top', $('#row-form').position().top-20);
-            
-            $('#topo').css('width', ($('#row-form').css('width')));
 
-        });
+            $('#rounded').css('height', $('#row-form').height());
+            
+            if($(window).width() < 1024){
+                $('#rounded').css('top', $('body').height()/2 - $('#rounded').height()/2);
+            } else{
+                $('#rounded').css('top', $('#form-entrada').offset().top - 50);
+            }
+
+            $('#topo').css('width', $('#form-entrada').width());
+            $('#topo img').css('width', $('#form-entrada').width());
+        {#            $('#topo').css('height', 120);#}
+            });
     </script>
 {% endblock javascripts %}
