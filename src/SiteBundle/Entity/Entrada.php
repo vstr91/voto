@@ -41,7 +41,7 @@ class Entrada {
     /**
      * @var string
      *
-     * @ORM\Column(name="nome", type="string", length=200, unique=true)
+     * @ORM\Column(name="nome", type="string", length=200, unique=false)
      * @Assert\NotBlank()
      * 
      */
@@ -73,8 +73,7 @@ class Entrada {
     /**
      * @var string
      *
-     * @ORM\Column(name="nomeResponsavel", type="string", length=200)
-     * @Assert\NotBlank()
+     * @ORM\Column(name="nomeResponsavel", type="string", length=200, nullable=true)
      * 
      */
     private $nomeResponsavel;
@@ -82,8 +81,7 @@ class Entrada {
     /**
      * @var string
      *
-     * @ORM\Column(name="cpfResponsavel", type="string", length=20)
-     * @Assert\NotBlank()
+     * @ORM\Column(name="cpfResponsavel", type="string", length=20, nullable=true)
      * 
      */
     private $cpfResponsavel;
@@ -96,10 +94,12 @@ class Entrada {
     protected $filial;
     
     /**
-     * @ORM\Column(name="estudaIngles", type="boolean")
+     * @var string
+     *
+     * @ORM\Column(name="telefoneResponsavel", type="string", length=20, nullable=true)
      * 
      */
-    protected $estudaIngles;
+    private $telefoneResponsavel;
     
     /**
      * @var string
@@ -292,30 +292,6 @@ class Entrada {
     }
 
     /**
-     * Set estudaIngles
-     *
-     * @param boolean $estudaIngles
-     *
-     * @return Entrada
-     */
-    public function setEstudaIngles($estudaIngles)
-    {
-        $this->estudaIngles = $estudaIngles;
-
-        return $this;
-    }
-
-    /**
-     * Get estudaIngles
-     *
-     * @return boolean
-     */
-    public function getEstudaIngles()
-    {
-        return $this->estudaIngles;
-    }
-
-    /**
      * Set frase
      *
      * @param string $frase
@@ -433,5 +409,29 @@ class Entrada {
     public function getFilial()
     {
         return $this->filial;
+    }
+
+    /**
+     * Set telefoneResponsavel
+     *
+     * @param string $telefoneResponsavel
+     *
+     * @return Entrada
+     */
+    public function setTelefoneResponsavel($telefoneResponsavel)
+    {
+        $this->telefoneResponsavel = $telefoneResponsavel;
+
+        return $this;
+    }
+
+    /**
+     * Get telefoneResponsavel
+     *
+     * @return string
+     */
+    public function getTelefoneResponsavel()
+    {
+        return $this->telefoneResponsavel;
     }
 }

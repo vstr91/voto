@@ -6,11 +6,11 @@
     <div class="container">
         <div class="row">
             <div id="topo" class="col-md-8 offset-2" style="height: auto; margin-top: 30px; margin-bottom: 30px">
-                <img src="{{ asset('imagens/topo.png') }}" style="height: 100%" />
+                <img src="{{ asset('imagens/topo.png') }}" />
             </div>
         </div>
         <div class="row" id="row-form">
-            <div class="col-8 offset-2">
+            <div class="col-md-8 col-10 col-sm-10 offset-md-2 offset-1 offset-sm-1">
                 {% if date("now"|date('Y-m-d')) < date('2019-08-31'|date('Y-m-d')) %}
                     <form name="form-entrada" id="form-entrada" method="POST" 
                           action="{{ path('site_processa_formulario') }}">
@@ -19,49 +19,49 @@
                         </div>
 
                         <div class="row">
-                            <div class="col-6">
-                                {{ form_widget(form.nome, {'attr': {'placeholder': 'Nome'}}) }}
+                            <div class="col-md-6 col-12 col-sm-12">
+                                {{ form_widget(form.nome, {'attr': {'placeholder': 'NOME COMPLETO'}}) }}
                             </div>
-                            <div class="col-6">
+                            <div class="col-md-6 col-12 col-sm-12">
+                                {{ form_widget(form.dataNascimento, {'attr': {'placeholder': 'DATA DE NASCIMENTO'}}) }}
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-6 col-12 col-sm-12">
                                 {{ form_widget(form.cpf, {'attr': {'placeholder': 'CPF'}}) }}
                             </div>
-                        </div>
-                        <div class="row">
-                            <div class="col-6">
-                                {{ form_widget(form.dataNascimento, {'attr': {'placeholder': 'Data de Nascimento'}}) }}
-                            </div>
-                            <div class="col-6">
-                                {{ form_widget(form.telefone, {'attr': {'placeholder': 'Telefone'}}) }}
+                            <div class="col-md-6 col-12 col-sm-12">
+                                {{ form_widget(form.telefone, {'attr': {'placeholder': 'TELEFONE'}}) }}
                             </div>
                         </div>
                         <div class="row">
-                            <div class="col-6">
-                                {{ form_widget(form.nomeResponsavel, {'attr': {'placeholder': 'Nome do Responsável'}}) }}
+                            <div class="col-md-6 col-12 col-sm-12">
+                                {{ form_widget(form.filial, {'attr': {'placeholder': 'LOCAL MAIS PRÓXIMO'}}) }}
                             </div>
-                            <div class="col-6">
-                                {{ form_widget(form.cpfResponsavel, {'attr': {'placeholder': 'CPF do Responsável'}}) }}
+                            <div class="col-md-6 col-12 col-sm-12">
+                                {{ form_widget(form.nomeResponsavel, {'attr': {'placeholder': 'NOME DO RESPONSÁVEL'}}) }}
                             </div>
                         </div>
                         <div class="row">
-                            <div class="col-6">
-                                {{ form_widget(form.filial, {'attr': {'placeholder': 'Cidade Mais Próxima'}}) }}
+                            <div class="col-md-6 col-12 col-sm-12">
+                                {{ form_widget(form.cpfResponsavel, {'attr': {'placeholder': 'CPF DO RESPONSÁVEL'}}) }}
                             </div>
-                            <div class="col-6">
-                                {{ form_widget(form.estudaIngles, {'attr': {'placeholder': 'Estuda Inglês?'}}) }}
+                            <div class="col-md-6 col-12 col-sm-12">
+                                {{ form_widget(form.telefoneResponsavel, {'attr': {'placeholder': 'TELEFONE DO RESPONSÁVEL'}}) }}
                             </div>
                         </div>
                         <div class="row">
                             <div class="col-12">
-                                {{ form_row(form.frase) }}
+                                {{ form_row(form.frase, {'attr': {'placeholder': 'ESCREVA AQUI SUA A FRASE'}}) }}
                             </div>
                         </div>
                         <div class="row">
-                            <div class="col-8">
+                            <div class="col-9">
                                 <input type="checkbox" name="checkRegulamento" id="checkRegulamento" />
                                 <label for="checkRegulamento">Estou de acordo com o regulamento</label> <br />
                                 <span id="erroCheck"></span>
                             </div>
-                            <div class="col-4">
+                            <div class="col-3">
                                 <input type="submit" value="Enviar" class="btn botao-branco float-right" id="btn-enviar" />
                             </div>
                         </div>
@@ -92,6 +92,7 @@
     <script type="text/javascript" src="{{ asset('js/jquery.form.min.js') }}"></script>
     <script type="text/javascript" src="{{ asset('js/jquery.validate.min.js') }}"></script>
     <script type="text/javascript" src="{{ asset('js/additional-methods.min.js') }}"></script>
+    <script type="text/javascript" src="{{ asset('js/moment-with-locales.min.js') }}"></script>
     <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.8.0/js/bootstrap-datepicker.min.js"></script>
     <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.8.0/locales/bootstrap-datepicker.pt-BR.min.js"></script>
 
@@ -119,6 +120,8 @@
         $(document).ready(function () {
             $('.cpf').mask('000.000.000-00', {reverse: true});
             $('.telefone').mask(SPMaskBehavior, spOptions);
+            
+            //alert(moment('01/03/2005', 'DD/MM/YYYY').isBefore(moment().subtract(18, 'years')));
 
             $('.datepicker').datepicker({
                 language: 'pt-BR',
@@ -130,6 +133,9 @@
             }, "Valor deve ser maior que zero");
 
             $('#form-entrada').validate({
+                invalidHandler: function(){
+                    //alert($('#sitebundle_entrada_dataNascimento').val());
+                },
                 submitHandler: function (form) {
 
                     $('#btn-enviar').attr('disabled', 'disabled');
@@ -164,18 +170,31 @@
                     'sitebundle_entrada[telefone]': {
                         required: true
                     },
-                    'sitebundle_entrada[nomeResponsavel]': 'required',
+                    'sitebundle_entrada[nomeResponsavel]': {
+                        required: {
+                            depends: function(element){
+                                return !moment($('#sitebundle_entrada_dataNascimento').val(), 'DD/MM/YYYY').isBefore(moment().subtract(18, 'years'));
+                            }
+                        }
+                    },
                     'sitebundle_entrada[cpfResponsavel]': {
-                        required: true,
+                        required: {
+                            depends: function(element){
+                                return !moment($('#sitebundle_entrada_dataNascimento').val(), 'DD/MM/YYYY').isBefore(moment().subtract(18, 'years'));
+                            }
+                        },
                         cpfBR: true
                     },
                     'sitebundle_entrada[filial]': {
                         required: true,
                         maiorQueZero: true
                     },
-                    'sitebundle_entrada[estudaIngles]': {
-                        required: true,
-                        maiorQueZero: true
+                    'sitebundle_entrada[telefoneResponsavel]': {
+                        required: {
+                            depends: function(element){
+                                return !moment($('#sitebundle_entrada_dataNascimento').val(), 'DD/MM/YYYY').isBefore(moment().subtract(18, 'years'));
+                            }
+                        }
                     },
                     'sitebundle_entrada[frase]': 'required',
                     'checkRegulamento': 'required'
@@ -192,16 +211,15 @@
                     },
                     'sitebundle_entrada[nomeResponsavel]': 'Informe o nome do responsável',
                     'sitebundle_entrada[cpfResponsavel]': {
-                        required: "Informe seu CPF",
+                        required: "Informe o CPF do responsável",
                         cpfBR: "Informe um CPF válido"
                     },
                     'sitebundle_entrada[filial]': {
-                        required: "Escolha a cidade mais próxima",
-                        maiorQueZero: "Escolha a cidade mais próxima"
+                        required: "Escolha o local mais próximo",
+                        maiorQueZero: "Escolha o local mais próximo"
                     },
-                    'sitebundle_entrada[estudaIngles]': {
-                        required: "Escolha uma opção acima",
-                        maiorQueZero: "Escolha uma opção acima"
+                    'sitebundle_entrada[telefoneResponsavel]': {
+                        required: "Informe o telefone do responsável"
                     },
                     'sitebundle_entrada[frase]': 'Digite a sua frase acima!',
                     'checkRegulamento': 'required'
@@ -216,18 +234,23 @@
 
                 }
             });
+        });
 
-            $('#rounded').css('height', $('#row-form').height());
-            
-            if($(window).width() < 1024){
-                $('#rounded').css('top', $('body').height()/2 - $('#rounded').height()/2);
-            } else{
-                $('#rounded').css('top', $('#form-entrada').offset().top - 50);
-            }
-
+        $(window).load(function () {
             $('#topo').css('width', $('#form-entrada').width());
             $('#topo img').css('width', $('#form-entrada').width());
         {#            $('#topo').css('height', 120);#}
+
+                $('#rounded').css('height', $('#row-form').height());
+                
+                $('#rounded').css('top', $('#form-entrada').offset().top - 50);
+
+                {#if ($(window).width() < 1024) {
+                    $('#rounded').css('top', $('body').height() / 2 - $('#rounded').height() / 2);
+                } else {
+                    $('#rounded').css('top', $('#form-entrada').offset().top - 50);
+                }#}
             });
+
     </script>
 {% endblock javascripts %}
