@@ -47,14 +47,12 @@ class EntradaType extends AbstractType
                 'class' => 'cpf'
             ]
         ])
-                ->add('estudaIngles', ChoiceType::class, [
-                    'label' => 'Estuda Inglês?',
-                    'choices' => [
-                        'Estuda Inglês?' => null,
-                        'Sim' => true, 
-                        'Não' => false
-                        ]
-                    ])
+                ->add('telefoneResponsavel', null, [
+            'label' => 'Telefone do Responsável',
+            'attr' => [
+                'class' => 'telefone'
+            ]
+        ])
                 ->add('frase', null, [
             'label' => ' ',
             'attr' => [
@@ -62,7 +60,7 @@ class EntradaType extends AbstractType
             ]
         ])
                 ->add('filial', EntityType::class, [
-            'label' => 'Cidade Mais Próxima',
+            'label' => 'Local Mais Próximo',
             'class' => Filial::class,
             'query_builder' => function (EntityRepository $er) {
                 return $er->createQueryBuilder('f')

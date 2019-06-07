@@ -142,7 +142,7 @@ class PageController extends Controller {
                                     'telefone' => $entrada->getTelefone(),
                                     'responsavel' => $entrada->getNomeResponsavel(),
                                     'cpfResponsavel' => $entrada->getCpfResponsavel(),
-                                    'estudaIngles' => $entrada->getEstudaIngles() ? "Sim" : "Não",
+                                    'telefoneResponsavel' => $entrada->getTelefoneResponsavel(),
                                     'frase' => $entrada->getFrase()
                                 )
                         ))

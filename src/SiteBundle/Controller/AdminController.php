@@ -26,7 +26,8 @@ class AdminController extends Controller {
 
         return $this->render('@Site/Admin/index.html.twig', [
             'entradas' => $entradas,
-            'filial' => $filial
+            'filial' => $filial,
+            'usuario' => $user
         ]);
     }
     
