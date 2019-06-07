@@ -23,8 +23,9 @@
                             <td>Telefone</td>
                             <td>Nome Respons&aacute;vel</td>
                             <td>CPF Respons&aacute;vel</td>
+                            <td>Telefone Respons&aacute;vel</td>
                             <td>Cidade Mais Pr&oacute;xima</td>
-                            <td>Estuda Ingl&ecirc;s?</td>
+                            <td>Aceitou Regulamento?</td>
                             <td>Frase</td>
                             <td>Data do Envio</td>
                         </tr>
@@ -38,8 +39,9 @@
                             <td>{{ e.telefone }}</td>
                             <td>{{ e.nomeResponsavel }}</td>
                             <td>{{ e.cpfResponsavel }}</td>
+                            <td>{{ e.telefoneResponsavel }}</td>
                             <td>{{ e.filial }}</td>
-                            <td>{{ e.estudaIngles == 1 ? 'Sim' : 'Não' }}</td>
+                            <td>{{ e.regulamentoAceito == 1 ? 'Sim' : 'Não' }}</td>
                             <td>{{ e.frase|raw }}</td>
                             <td>{{ e.dataCadastro|date('d/m/Y H:i') }}</td>
                         </tr>

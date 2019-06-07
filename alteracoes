@@ -1,0 +1,7 @@
+ALTER TABLE entrada ADD regulamento_aceito TINYINT(1) NOT NULL;
+ALTER TABLE entrada CHANGE regulamento_aceito regulamento_aceito TINYINT(1) DEFAULT NULL;
+
+- Arquivos
+PageController
+Entrada
+email.html.twig

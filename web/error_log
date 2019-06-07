@@ -1,0 +1,36 @@
+[05-Jun-2019 16:51:55 America/Sao_Paulo] PHP Fatal error:  Uncaught Twig\Error\LoaderError: The "/home1/gototo11/public_html\vendor\symfony\symfony\src\Symfony\Bundle\FrameworkBundle/Resources/views" directory does not exist ("/home1/gototo11/public_html\vendor\symfony\symfony\src\Symfony\Bundle\FrameworkBundle/Resources/views"). in /home1/gototo11/public_html/vendor/twig/twig/src/Loader/FilesystemLoader.php:106
+Stack trace:
+#0 /home1/gototo11/public_html/var/cache/prod/ContainerU5ogjvr/appProdProjectContainer.php(1384): Twig\Loader\FilesystemLoader->addPath('/home1/gototo11...', 'Framework')
+#1 /home1/gototo11/public_html/var/cache/prod/ContainerU5ogjvr/appProdProjectContainer.php(873): ContainerU5ogjvr\appProdProjectContainer->getTwig_LoaderService()
+#2 /home1/gototo11/public_html/var/cache/prod/ContainerU5ogjvr/appProdProjectContainer.php(1340): ContainerU5ogjvr\appProdProjectContainer->getTwigService()
+#3 /home1/gototo11/public_html/var/cache/prod/ContainerU5ogjvr/appProdProjectContainer.php(773): ContainerU5ogjvr\appProdProjectContainer->getSensioFrameworkExtra_ in /home1/gototo11/public_html/vendor/twig/twig/src/Loader/FilesystemLoader.php on line 205
+[05-Jun-2019 16:53:18 America/Sao_Paulo] PHP Fatal error:  Uncaught Symfony\Component\Routing\Exception\ResourceNotFoundException in /home1/gototo11/public_html/var/cache/prod/appProdProjectContainerUrlMatcher.php:70
+Stack trace:
+#0 /home1/gototo11/public_html/vendor/symfony/symfony/src/Symfony/Component/Routing/Matcher/UrlMatcher.php(95): appProdProjectContainerUrlMatcher->match('/imagens/topo.p...')
+#1 /home1/gototo11/public_html/vendor/symfony/symfony/src/Symfony/Component/Routing/Router.php(262): Symfony\Component\Routing\Matcher\UrlMatcher->matchRequest(Object(Symfony\Component\HttpFoundation\Request))
+#2 /home1/gototo11/public_html/vendor/symfony/symfony/src/Symfony/Component/HttpKernel/EventListener/RouterListener.php(115): Symfony\Component\Routing\Router->matchRequest(Object(Symfony\Component\HttpFoundation\Request))
+#3 /home1/gototo11/public_html/vendor/symfony/symfony/src/Symfony/Component/EventDispatcher/EventDispatcher.php(212): Symfony\Component\HttpKernel\EventListener\RouterListener->onKernelRequest(Object(Symfony\Component\HttpKernel\Event\GetRespons in /home1/gototo11/public_html/vendor/twig/twig/src/Loader/FilesystemLoader.php on line 205
+[05-Jun-2019 16:53:28 America/Sao_Paulo] PHP Fatal error:  Uncaught Symfony\Component\Routing\Exception\ResourceNotFoundException in /home1/gototo11/public_html/var/cache/prod/appProdProjectContainerUrlMatcher.php:70
+Stack trace:
+#0 /home1/gototo11/public_html/vendor/symfony/symfony/src/Symfony/Component/Routing/Matcher/UrlMatcher.php(95): appProdProjectContainerUrlMatcher->match('/imagens/topo.p...')
+#1 /home1/gototo11/public_html/vendor/symfony/symfony/src/Symfony/Component/Routing/Router.php(262): Symfony\Component\Routing\Matcher\UrlMatcher->matchRequest(Object(Symfony\Component\HttpFoundation\Request))
+#2 /home1/gototo11/public_html/vendor/symfony/symfony/src/Symfony/Component/HttpKernel/EventListener/RouterListener.php(115): Symfony\Component\Routing\Router->matchRequest(Object(Symfony\Component\HttpFoundation\Request))
+#3 /home1/gototo11/public_html/vendor/symfony/symfony/src/Symfony/Component/EventDispatcher/EventDispatcher.php(212): Symfony\Component\HttpKernel\EventListener\RouterListener->onKernelRequest(Object(Symfony\Component\HttpKernel\Event\GetRespons in /home1/gototo11/public_html/vendor/twig/twig/src/Loader/FilesystemLoader.php on line 205
+[05-Jun-2019 16:53:30 America/Sao_Paulo] PHP Fatal error:  Uncaught Symfony\Component\Routing\Exception\ResourceNotFoundException in /home1/gototo11/public_html/var/cache/prod/appProdProjectContainerUrlMatcher.php:70
+Stack trace:
+#0 /home1/gototo11/public_html/vendor/symfony/symfony/src/Symfony/Component/Routing/Matcher/UrlMatcher.php(95): appProdProjectContainerUrlMatcher->match('/imagens/topo.p...')
+#1 /home1/gototo11/public_html/vendor/symfony/symfony/src/Symfony/Component/Routing/Router.php(262): Symfony\Component\Routing\Matcher\UrlMatcher->matchRequest(Object(Symfony\Component\HttpFoundation\Request))
+#2 /home1/gototo11/public_html/vendor/symfony/symfony/src/Symfony/Component/HttpKernel/EventListener/RouterListener.php(115): Symfony\Component\Routing\Router->matchRequest(Object(Symfony\Component\HttpFoundation\Request))
+#3 /home1/gototo11/public_html/vendor/symfony/symfony/src/Symfony/Component/EventDispatcher/EventDispatcher.php(212): Symfony\Component\HttpKernel\EventListener\RouterListener->onKernelRequest(Object(Symfony\Component\HttpKernel\Event\GetRespons in /home1/gototo11/public_html/vendor/twig/twig/src/Loader/FilesystemLoader.php on line 205
+[05-Jun-2019 17:02:15 America/Sao_Paulo] PHP Fatal error:  Uncaught Twig\Error\LoaderError: The "/home1/gototo11/public_html\vendor\symfony\symfony\src\Symfony\Bundle\FrameworkBundle/Resources/views" directory does not exist ("/home1/gototo11/public_html\vendor\symfony\symfony\src\Symfony\Bundle\FrameworkBundle/Resources/views"). in /home1/gototo11/public_html/vendor/twig/twig/src/Loader/FilesystemLoader.php:106
+Stack trace:
+#0 /home1/gototo11/public_html/var/cache/prod/ContainerU5ogjvr/appProdProjectContainer.php(1384): Twig\Loader\FilesystemLoader->addPath('/home1/gototo11...', 'Framework')
+#1 /home1/gototo11/public_html/var/cache/prod/ContainerU5ogjvr/appProdProjectContainer.php(873): ContainerU5ogjvr\appProdProjectContainer->getTwig_LoaderService()
+#2 /home1/gototo11/public_html/var/cache/prod/ContainerU5ogjvr/appProdProjectContainer.php(1340): ContainerU5ogjvr\appProdProjectContainer->getTwigService()
+#3 /home1/gototo11/public_html/var/cache/prod/ContainerU5ogjvr/appProdProjectContainer.php(773): ContainerU5ogjvr\appProdProjectContainer->getSensioFrameworkExtra_ in /home1/gototo11/public_html/vendor/twig/twig/src/Loader/FilesystemLoader.php on line 205
+[05-Jun-2019 17:02:20 America/Sao_Paulo] PHP Fatal error:  Uncaught Twig\Error\LoaderError: The "/home1/gototo11/public_html\vendor\symfony\symfony\src\Symfony\Bundle\FrameworkBundle/Resources/views" directory does not exist ("/home1/gototo11/public_html\vendor\symfony\symfony\src\Symfony\Bundle\FrameworkBundle/Resources/views"). in /home1/gototo11/public_html/vendor/twig/twig/src/Loader/FilesystemLoader.php:106
+Stack trace:
+#0 /home1/gototo11/public_html/var/cache/prod/ContainerU5ogjvr/appProdProjectContainer.php(1384): Twig\Loader\FilesystemLoader->addPath('/home1/gototo11...', 'Framework')
+#1 /home1/gototo11/public_html/var/cache/prod/ContainerU5ogjvr/appProdProjectContainer.php(873): ContainerU5ogjvr\appProdProjectContainer->getTwig_LoaderService()
+#2 /home1/gototo11/public_html/var/cache/prod/ContainerU5ogjvr/appProdProjectContainer.php(1340): ContainerU5ogjvr\appProdProjectContainer->getTwigService()
+#3 /home1/gototo11/public_html/var/cache/prod/ContainerU5ogjvr/appProdProjectContainer.php(773): ContainerU5ogjvr\appProdProjectContainer->getSensioFrameworkExtra_ in /home1/gototo11/public_html/vendor/twig/twig/src/Loader/FilesystemLoader.php on line 205
