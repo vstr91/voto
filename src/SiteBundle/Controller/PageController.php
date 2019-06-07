@@ -47,7 +47,12 @@ class PageController extends Controller {
             // testa se CPF ja foi cadastrado
             $ent = $em->getRepository('SiteBundle:Entrada')
                     ->findOneBy(array('cpf' => $entrada->getCpf()));
-
+            
+            if($request->get('checkRegulamento') == 'on'){
+                $entrada->setRegulamentoAceito(true);
+            } else{
+                $entrada->setRegulamentoAceito(false);
+            }
 
             if ($ent != null) {
                 return new \Symfony\Component\HttpFoundation\Response('O CPF informado já enviou uma frase!');
@@ -143,7 +148,8 @@ class PageController extends Controller {
                                     'responsavel' => $entrada->getNomeResponsavel(),
                                     'cpfResponsavel' => $entrada->getCpfResponsavel(),
                                     'telefoneResponsavel' => $entrada->getTelefoneResponsavel(),
-                                    'frase' => $entrada->getFrase()
+                                    'frase' => $entrada->getFrase(),
+                                    'regulamentoAceito' => $entrada->getRegulamentoAceito() == true ? 'Sim' : 'Não'
                                 )
                         ))
                         ->setContentType("text/html");

@@ -128,6 +128,12 @@ class Entrada {
     protected $dataCadastro;
     
     /**
+     * @ORM\Column(type="boolean", nullable=true)
+     * 
+     */
+    protected $regulamentoAceito;
+    
+    /**
      * @ORM\PrePersist()
      */
     public function prePersist()
@@ -433,5 +439,29 @@ class Entrada {
     public function getTelefoneResponsavel()
     {
         return $this->telefoneResponsavel;
+    }
+
+    /**
+     * Set regulamentoAceito
+     *
+     * @param boolean $regulamentoAceito
+     *
+     * @return Entrada
+     */
+    public function setRegulamentoAceito($regulamentoAceito)
+    {
+        $this->regulamentoAceito = $regulamentoAceito;
+
+        return $this;
+    }
+
+    /**
+     * Get regulamentoAceito
+     *
+     * @return boolean
+     */
+    public function getRegulamentoAceito()
+    {
+        return $this->regulamentoAceito;
     }
 }
