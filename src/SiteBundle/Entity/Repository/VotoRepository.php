@@ -10,4 +10,19 @@ namespace SiteBundle\Entity\Repository;
  */
 class VotoRepository extends \Doctrine\ORM\EntityRepository
 {
+    
+    public function checarVotoUsuario($usuario){
+        $qb = $this->createQueryBuilder('v')
+                ->select('v')
+                ->innerJoin('SiteBundle:Entrada', 'e', 'WITH', 'v.entrada = e.id')
+                ->innerJoin('SiteBundle:Usuario', 'u', 'WITH', 'v.usuario = u.id')
+                ->distinct()
+                ->where('u.id = :usuario')
+                ->setParameter('usuario', $usuario)
+                ->addOrderBy('e.dataCadastro', 'DESC');
+        
+        return $qb->getQuery()->getResult();
+        
+    }
+    
 }

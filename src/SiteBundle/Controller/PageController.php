@@ -24,9 +24,19 @@ class PageController extends Controller {
         $em = $this->getDoctrine()->getManager();
         
         $entradas = $em->getRepository('SiteBundle:Entrada')->listarTodosParaVotacao();
+        
+        $user = $this->get('security.token_storage')->getToken()->getUser();
+        
+        $votoUsuario = null;
+        
+        if($user != 'anon.'){
+            $votoUsuario = $em->getRepository('SiteBundle:Voto')->checarVotoUsuario($user->getId());
+        }
 
         return $this->render('@Site/Page/voto.html.twig', [
-                    "entradas" => $entradas
+            "entradas" => $entradas,
+            "user" => $user,
+            "voto" => $votoUsuario
         ]);
     }
 
@@ -81,6 +91,31 @@ class PageController extends Controller {
             
             $this->enviarEmail("Email Frase", $filial->getEmail(), $filial->getEmail(), $entrada);
 
+            return new \Symfony\Component\HttpFoundation\Response('0');
+        }
+
+        return new \Symfony\Component\HttpFoundation\Response('Por favor preencha todos os dados solicitados.');
+    }
+    
+    public function processaVotoAction(\Symfony\Component\HttpFoundation\Request $request) {
+
+        $voto = new \SiteBundle\Entity\Voto();
+        $em = $this->getDoctrine()->getManager();
+        
+        $frase = $request->request->get("frases");
+        
+        $entrada = $em->getRepository('SiteBundle:Entrada')
+                    ->findOneBy(array('id' => $frase));
+        
+        $user = $this->get('security.token_storage')->getToken()->getUser();
+        
+        if($entrada != null && $user != null){
+            $voto->setEntrada($entrada);
+            $voto->setUsuario($user);
+
+            $em->persist($voto);
+            $em->flush();
+            
             return new \Symfony\Component\HttpFoundation\Response('0');
         }
 

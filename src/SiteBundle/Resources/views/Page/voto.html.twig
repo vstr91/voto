@@ -8,11 +8,48 @@
         <div class="row">
             <div class="col-8 offset-2">
                 {% if date("now"|date('Y-m-d')) > date('2019-04-31'|date('Y-m-d')) %}
-                    
-                    {% for e in entradas %}
+
+                    {% if user != null and user != 'anon.' %}
+                        <p>Logado como {{ user.username }} <a href="{{ path('fos_user_security_logout') }}"><span>Sair</span>
+                            </a></p>
+
+                        {% if voto|length == 0 %}
+
+                            <h4 class="text-center">Vote na melhor frase!</h4>
+                            
+                            <form name="form-voto" id="form-voto" action="{{ path('site_processa_voto') }}" method="POST">
+                                
+                                {% for e in entradas %}
+                                    <p><input type="radio" id="{{ e.id }}" name="frases" value="{{ e.id }}" /> 
+                                        <label for="{{ e.id }}">{{ e.frase|raw }} ({{ e.nome }})</label></p>
+                                {% endfor %}
+                                
+                                <p class="error"><span id="erroCheck"></span></p>
+                                
+                                <input type="submit" value="Votar!" class="btn btn-primary" id="btn-votar" />
+                            </form>
+                            
+                        {% else %}
+                            <p>S&oacute; &eacute; poss&iacute;vel votar uma vez por usu&aacute;rio! 
+                                Este usu&aacute;rio já votou em {{ voto[0].entrada.frase|raw }} ({{ voto[0].entrada.nome }})</p>
+                        {% endif %}
+
+                    {% else %}
+                        <h4 class="text-center">Vote na melhor frase!</h4>
+
+                        {% for e in entradas %}
+                            <p>{{ e.frase|raw }} ({{ e.nome }})</p>
+                        {% endfor %}
                         
-                    {% endfor %}
-                    
+                        <p class="text-center"><a href="{{ path('hwi_oauth_service_redirect', {'service': 'google' }) }}">
+                            <span>Entre com sua conta da Google para poder votar!</span>
+                            </a></p>
+                    {% endif %}
+
+
+
+
+
                 {% else %}
                     <p>A vota&ccedil;&atilde;o ainda n&atilde;o foi iniciada...</p>
                 {% endif %}
@@ -55,24 +92,24 @@
                 return this.optional(element) || (parseFloat(value) > 0);
             }, "Valor deve ser maior que zero");
 
-            $('#form-entrada').validate({
+            $('#form-voto').validate({
                 submitHandler: function (form) {
 
-                    $('#btn-enviar').attr('disabled', 'disabled');
-                    $('#btn-enviar').val("Enviando frase...");
+                    $('#btn-votar').attr('disabled', 'disabled');
+                    $('#btn-votar').val("Salvando seu voto...");
 
                     $(form).ajaxSubmit({
                         success: function (response, status, xhr, form) {
 
                             if (response == '0') {
-                                alert('Frase enviada com sucesso! Boa sorte!');
+                                alert('Voto computado com sucesso!');
                                 location.reload();
                             } else {
                                 alert(response);
                             }
 
                             $('#btn-enviar').removeAttr('disabled');
-                            $('#btn-enviar').val("Enviar");
+                            $('#btn-enviar').val("Votar");
 
                         }
                     });
@@ -81,61 +118,15 @@
 
                 },
                 rules: {
-                    'sitebundle_entrada[nome]': 'required',
-                    'sitebundle_entrada[cpf]': {
-                        required: true,
-                        cpfBR: true
-                    },
-                    'sitebundle_entrada[dataNascimento]': 'required',
-                    'sitebundle_entrada[telefone]': {
-                        required: true
-                    },
-                    'sitebundle_entrada[nomeResponsavel]': 'required',
-                    'sitebundle_entrada[cpfResponsavel]': {
-                        required: true,
-                        cpfBR: true
-                    },
-                    'sitebundle_entrada[filial]': {
-                        required: true,
-                        maiorQueZero: true
-                    },
-                    'sitebundle_entrada[estudaIngles]': {
-                        required: true,
-                        maiorQueZero: true
-                    },
-                    'sitebundle_entrada[frase]': 'required',
-                    'checkRegulamento': 'required'
+                    'frases': 'required'
                 },
                 messages: {
-                    'sitebundle_entrada[nome]': 'Informe seu nome completo',
-                    'sitebundle_entrada[cpf]': {
-                        required: "Informe seu CPF",
-                        cpfBR: "Informe um CPF válido"
-                    },
-                    'sitebundle_entrada[dataNascimento]': 'Informe sua data de nascimento',
-                    'sitebundle_entrada[telefone]': {
-                        required: "Informe um telefone para contato"
-                    },
-                    'sitebundle_entrada[nomeResponsavel]': 'Informe o nome do responsável',
-                    'sitebundle_entrada[cpfResponsavel]': {
-                        required: "Informe seu CPF",
-                        cpfBR: "Informe um CPF válido"
-                    },
-                    'sitebundle_entrada[filial]': {
-                        required: "Escolha a cidade mais próxima",
-                        maiorQueZero: "Escolha a cidade mais próxima"
-                    },
-                    'sitebundle_entrada[estudaIngles]': {
-                        required: "Escolha uma opção acima",
-                        maiorQueZero: "Escolha uma opção acima"
-                    },
-                    'sitebundle_entrada[frase]': 'Digite a sua frase acima!',
-                    'checkRegulamento': 'required'
+                    'frases': 'Informe seu nome completo'
                 },
                 errorPlacement: function (error, element) {
 
-                    if (element.attr("name") == "checkRegulamento") {
-                        $("#erroCheck").text("É necessário concordar com os termos do regulamento.");
+                    if (element.attr("name") == "frases") {
+                        $("#erroCheck").text("Por favor escolha uma frase acima!");
                     } else {
                         error.insertAfter(element);
                     }

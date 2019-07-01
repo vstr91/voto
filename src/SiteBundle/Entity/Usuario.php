@@ -77,6 +77,7 @@ class Usuario extends BaseUser {
     public function prePersist()
     {
         $this->setDataCadastro(new \DateTime());
+        $this->addRole('ROLE_USER_VOTE');
         
     }
 

@@ -8,6 +8,7 @@ security:
     role_hierarchy:
         ROLE_ADMIN:       ROLE_USER
         ROLE_SUPER_ADMIN: ROLE_ADMIN
+        ROLE_USER_VOTE: ROLE_USER_VOTE
 
     # https://symfony.com/doc/current/security.html#b-configuring-how-users-are-loaded
     providers:
@@ -33,6 +34,16 @@ security:
                 default_target_path: site_admin_homepage
                 check_path:  fos_user_security_check
                 csrf_token_generator: security.csrf.token_manager
+            oauth:
+                resource_owners:
+                    google:             "/login/check-google"
+                login_path:        /voto
+                use_forward:       false
+                failure_path:      /voto
+                default_target_path: /voto
+                check_path:  fos_user_security_check
+                oauth_user_provider:
+                    service: my_user_provider
             logout:
                 path: fos_user_security_logout
                 target: fos_user_security_login

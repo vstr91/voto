@@ -17,3 +17,10 @@ site_admin_filial_homepage:
 site_processa_formulario:
     path:     /processa-form
     defaults: { _controller: SiteBundle:Page:processaForm }
+    
+site_processa_voto:
+    path:     /processa-voto
+    defaults: { _controller: SiteBundle:Page:processaVoto }
+    
+google_login:
+    path: /login/check-google

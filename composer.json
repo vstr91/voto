@@ -38,7 +38,9 @@
         "php-http/socket-client": "^1.0",
         "google/apiclient": "dev-master",
         "doctrine/doctrine-fixtures-bundle": "3.0",
-        "symfony/templating": "3.4.*"
+        "symfony/templating": "3.4.*",
+        "php-http/guzzle6-adapter": "1.1.1",
+        "php-http/httplug-bundle": "1.15.2"
     },
     "require-dev": {
         "sensio/generator-bundle": "^3.0",

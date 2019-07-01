@@ -19,6 +19,12 @@ class AdminController extends Controller {
         
         if($user->getRoles()[0] == 'ROLE_SUPER_ADMIN'){
             $entradas = $em->getRepository('SiteBundle:Entrada')->listarTodos();
+        } else if($user->getRoles()[0] == 'ROLE_USER'){
+            $entradas = $em->getRepository('SiteBundle:Entrada')->listarTodos();
+            return $this->render('@Site/Page/voto.html.twig', [
+                'entradas' => $entradas,
+                'user' => $user
+            ]);
         } else{
             $filial = $em->getRepository('SiteBundle:Filial')->findOneBy(array('id' => $user->getFilial()->getId()));
             $entradas = $em->getRepository('SiteBundle:Entrada')->listarTodosPorFilial($filial->getSlug());
