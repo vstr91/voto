@@ -25,7 +25,7 @@ use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
  * @ORM\Entity(repositoryClass="SiteBundle\Entity\Repository\VotoRepository")
  * @ORM\Table(name="voto")
  * @ORM\HasLifecycleCallbacks()
- * @UniqueEntity("usuario", message="O usuário já votou.")
+ * @UniqueEntity("cpf", message="O usuário com o CPF informado já votou.")
  * 
  */
 class Voto {
@@ -41,24 +41,29 @@ class Voto {
     protected $id;
     
     /**
-     * @ORM\ManyToOne(targetEntity="Entrada")
-     * @ORM\JoinColumn(name="entrada", referencedColumnName="id")
+     * @ORM\ManyToOne(targetEntity="Frase")
+     * @ORM\JoinColumn(name="frase", referencedColumnName="id")
      * 
      */
-    protected $entrada;
+    protected $frase;
     
     /**
-     * @ORM\ManyToOne(targetEntity="Usuario")
-     * @ORM\JoinColumn(name="usuario", referencedColumnName="id")
+     * @var string
+     *
+     * @ORM\Column(name="nome", type="string", length=200, unique=false)
+     * @Assert\NotBlank()
      * 
      */
-    protected $usuario;
+    private $nome;
     
     /**
-     * @ORM\Column(type="boolean")
+     * @var string
+     *
+     * @ORM\Column(name="cpf", type="string", length=200, unique=true)
+     * @Assert\NotBlank()
      * 
      */
-    protected $ativo = true;
+    private $cpf;
     
     /**
      * @ORM\Column(type="datetime")
@@ -73,7 +78,7 @@ class Voto {
         $this->setDataCadastro(new \DateTime());
         
     }
-    
+   
 
     /**
      * Get id
@@ -86,27 +91,51 @@ class Voto {
     }
 
     /**
-     * Set ativo
+     * Set nome
      *
-     * @param boolean $ativo
+     * @param string $nome
      *
      * @return Voto
      */
-    public function setAtivo($ativo)
+    public function setNome($nome)
     {
-        $this->ativo = $ativo;
+        $this->nome = $nome;
 
         return $this;
     }
 
     /**
-     * Get ativo
+     * Get nome
      *
-     * @return boolean
+     * @return string
      */
-    public function getAtivo()
+    public function getNome()
     {
-        return $this->ativo;
+        return $this->nome;
+    }
+
+    /**
+     * Set cpf
+     *
+     * @param string $cpf
+     *
+     * @return Voto
+     */
+    public function setCpf($cpf)
+    {
+        $this->cpf = $cpf;
+
+        return $this;
+    }
+
+    /**
+     * Get cpf
+     *
+     * @return string
+     */
+    public function getCpf()
+    {
+        return $this->cpf;
     }
 
     /**
@@ -134,50 +163,26 @@ class Voto {
     }
 
     /**
-     * Set entrada
+     * Set frase
      *
-     * @param \SiteBundle\Entity\Entrada $entrada
+     * @param \SiteBundle\Entity\Frase $frase
      *
      * @return Voto
      */
-    public function setEntrada(\SiteBundle\Entity\Entrada $entrada = null)
+    public function setFrase(\SiteBundle\Entity\Frase $frase = null)
     {
-        $this->entrada = $entrada;
+        $this->frase = $frase;
 
         return $this;
     }
 
     /**
-     * Get entrada
+     * Get frase
      *
-     * @return \SiteBundle\Entity\Entrada
+     * @return \SiteBundle\Entity\Frase
      */
-    public function getEntrada()
+    public function getFrase()
     {
-        return $this->entrada;
-    }
-
-    /**
-     * Set usuario
-     *
-     * @param \SiteBundle\Entity\Usuario $usuario
-     *
-     * @return Voto
-     */
-    public function setUsuario(\SiteBundle\Entity\Usuario $usuario = null)
-    {
-        $this->usuario = $usuario;
-
-        return $this;
-    }
-
-    /**
-     * Get usuario
-     *
-     * @return \SiteBundle\Entity\Usuario
-     */
-    public function getUsuario()
-    {
-        return $this->usuario;
+        return $this->frase;
     }
 }

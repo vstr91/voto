@@ -13,7 +13,18 @@ class VotoType extends AbstractType
      */
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
-        $builder->add('dataCadastro')->add('entrada')->add('usuario');
+        $builder->add('nome', null, [
+            'label' => 'Nome Completo',
+            'attr' => [
+                'class' => 'form-voto'
+            ]
+        ])
+                ->add('cpf', null, [
+            'label' => 'CPF',
+            'attr' => [
+                'class' => 'cpf form-voto'
+            ]
+        ]);
     }/**
      * {@inheritdoc}
      */

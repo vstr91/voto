@@ -34,3 +34,42 @@ input.error, textarea.error, select.error{
     background-color: white;
     color: darkgray;
 }
+
+#btn-votar{
+    width: 100%;
+    height: auto;
+    margin-top: 5px;
+    background-color: #91be00;
+    color: purple;
+    font-weight: bold;
+}
+
+.form-voto{
+    -webkit-box-shadow: 10px 10px 20px 0px rgba(50,50,50,1);
+    -moz-box-shadow: 10px 10px 20px 0px rgba(50,50,50,1);
+    box-shadow: 10px 10px 20px 0px rgba(50,50,50,1);
+}
+
+.card-voto{
+    background-color: white;
+    border-radius: 10px;
+    margin-top: 20px;
+    margin-bottom: 20px;
+    color: purple;
+    font-weight: bold;
+    padding: 10px;
+}
+
+.linha-frase{
+    padding: 20px;
+    border-radius: 10px;
+}
+
+.linha-frase.selecionada{
+    background-color: rgba(145, 190, 0, 0.5); 
+}
+
+.linha-frase:hover{
+    cursor: pointer;
+    background-color: rgba(145, 190, 0, 0.5);
+}

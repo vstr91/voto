@@ -1,55 +1,60 @@
 {% extends "base.html.twig" %}
 {% block body %}
+    <div id="rounded" style="background-color: #9933cc; border-radius: 0 800px 800px 0; 
+         height: 10%; max-height: 80%; width: 80%; position: absolute; 
+         left: 0; margin-bottom: 50px;"></div>
     <div class="container">
         <div class="row">
-            <div class="col-md-8 offset-2" style="background-color: #DD00AA;
-                 width: 100%; height: 200px; margin-top: 20px; margin-bottom: 20px;"></div>
+            <div id="topo" class="col-md-8 offset-2" style="height: auto; margin-top: 30px; margin-bottom: 30px">
+{#                <img src="{{ asset('imagens/topo.png') }}" />#}
+            </div>
         </div>
-        <div class="row">
-            <div class="col-8 offset-2">
-                {% if date("now"|date('Y-m-d')) > date('2019-04-31'|date('Y-m-d')) %}
+        <div class="row" id="row-form">
+            <div class="col-md-8 col-10 col-sm-10 offset-md-2 offset-1 offset-sm-1">
+                {% if date("now"|date('Y-m-d')) >= date('2020-02-01'|date('Y-m-d')) %}
+                    
+                    {% for f in frases %}
+                        <div class="linha-frase" data-id="{{ f.id }}">
+                            <h5>Autor(a): {{ f.autor }}<br />
+                            Filial: {{ f.filial }}</h5>
 
-                    {% if user != null and user != 'anon.' %}
-                        <p>Logado como {{ user.username }} <a href="{{ path('fos_user_security_logout') }}"><span>Sair</span>
-                            </a></p>
-
-                        {% if voto|length == 0 %}
-
-                            <h4 class="text-center">Vote na melhor frase!</h4>
-                            
-                            <form name="form-voto" id="form-voto" action="{{ path('site_processa_voto') }}" method="POST">
-                                
-                                {% for e in entradas %}
-                                    <p><input type="radio" id="{{ e.id }}" name="frases" value="{{ e.id }}" /> 
-                                        <label for="{{ e.id }}">{{ e.frase|raw }} ({{ e.nome }})</label></p>
-                                {% endfor %}
-                                
-                                <p class="error"><span id="erroCheck"></span></p>
-                                
-                                <input type="submit" value="Votar!" class="btn btn-primary" id="btn-votar" />
-                            </form>
-                            
-                        {% else %}
-                            <p>S&oacute; &eacute; poss&iacute;vel votar uma vez por usu&aacute;rio! 
-                                Este usu&aacute;rio já votou em {{ voto[0].entrada.frase|raw }} ({{ voto[0].entrada.nome }})</p>
-                        {% endif %}
-
-                    {% else %}
-                        <h4 class="text-center">Vote na melhor frase!</h4>
-
-                        {% for e in entradas %}
-                            <p>{{ e.frase|raw }} ({{ e.nome }})</p>
-                        {% endfor %}
+                            <div class="form-voto card card-voto">
+                                <p>{{ f.frase|raw }}</p>
+                            </div>
+                            <div>{{ f.votos }} voto(s)</div>
+                        </div>
+                        <br />
+                    {% endfor %}
+                    
+                    <form name="form-voto" id="form-voto" method="POST" 
+                          action="{{ path('site_processa_voto') }}">
+                        <div class="my-custom-class-for-errors">
+                            {{ form_errors(form) }}
+                        </div>
                         
-                        <p class="text-center"><a href="{{ path('hwi_oauth_service_redirect', {'service': 'google' }) }}">
-                            <span>Entre com sua conta da Google para poder votar!</span>
-                            </a></p>
-                    {% endif %}
+                        <div class="row">
+                            <div class="col-12 text-center text-bold">
+                                <p>Por favor informe seus dados para votar!</p>
+                            </div>
+                        </div>
 
-
-
-
-
+                        <div class="row">
+                            <div class="col-md-6 col-12 col-sm-12">
+                                {{ form_widget(form.nome, {'attr': {'placeholder': 'NOME COMPLETO'}}) }}
+                            </div>
+                            <div class="col-md-4 col-12 col-sm-12">
+                                {{ form_widget(form.cpf, {'attr': {'placeholder': 'CPF'}}) }}
+                            </div>
+                            <div class="col-md-2 col-12 col-sm-12">
+                                <input type="hidden" name="id-frase" id="id-frase" />
+                                <input type="submit" value="VOTAR" class="btn float-right form-voto" id="btn-votar" />
+                            </div>
+                        </div>
+                            
+                        <div class="g-recaptcha" data-sitekey="6Lf3stUUAAAAAPbMx8YHOcuAbX1F7_5Y83F8le0p"></div>
+                            
+                        {{ form_end(form) }}
+                    </form>
                 {% else %}
                     <p>A vota&ccedil;&atilde;o ainda n&atilde;o foi iniciada...</p>
                 {% endif %}
@@ -68,6 +73,7 @@
     <script type="text/javascript" src="{{ asset('js/additional-methods.min.js') }}"></script>
     <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.8.0/js/bootstrap-datepicker.min.js"></script>
     <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.8.0/locales/bootstrap-datepicker.pt-BR.min.js"></script>
+    <script src="https://www.google.com/recaptcha/api.js" async defer></script>
 
     <script>
         var SPMaskBehavior = function (val) {
@@ -81,47 +87,62 @@
 
         $(document).ready(function () {
             $('.cpf').mask('000.000.000-00', {reverse: true});
-            $('.telefone').mask(SPMaskBehavior, spOptions);
-
-            $('.datepicker').datepicker({
-                language: 'pt-BR',
-                endDate: '-16y'
-            });
-
-            jQuery.validator.addMethod("maiorQueZero", function (value, element) {
-                return this.optional(element) || (parseFloat(value) > 0);
-            }, "Valor deve ser maior que zero");
 
             $('#form-voto').validate({
                 submitHandler: function (form) {
+                    
+                    var cont = 0;
+                
+                    $('.linha-frase').each(function(i, e){
 
-                    $('#btn-votar').attr('disabled', 'disabled');
-                    $('#btn-votar').val("Salvando seu voto...");
-
-                    $(form).ajaxSubmit({
-                        success: function (response, status, xhr, form) {
-
-                            if (response == '0') {
-                                alert('Voto computado com sucesso!');
-                                location.reload();
-                            } else {
-                                alert(response);
-                            }
-
-                            $('#btn-enviar').removeAttr('disabled');
-                            $('#btn-enviar').val("Votar");
-
+                        if($(e).hasClass('selecionada')){
+                            cont++;
                         }
+
                     });
+
+                    if(cont == 0){
+                        alert("Por favor selecione uma frase!");
+                    } else if(cont > 1){
+                        alert("Apenas uma frase pode ser selecionada!");
+                    } else{
+                        $('#btn-votar').attr('disabled', 'disabled');
+                        $('#btn-votar').val("...");
+
+                        $(form).ajaxSubmit({
+                            success: function (response, status, xhr, form) {
+
+                                if (response == '0') {
+                                    alert('Voto computado com sucesso!');
+                                    location.reload();
+                                } else {
+                                    alert(response);
+                                }
+
+                                $('#btn-votar').removeAttr('disabled');
+                                $('#btn-votar').val("VOTAR");
+
+                            }
+                        });
+                        
+                    }
 
                     return false;
 
                 },
                 rules: {
-                    'frases': 'required'
+                    'sitebundle_voto[nome]': 'required',
+                    'sitebundle_voto[cpf]': {
+                        required: true//,
+                        //cpfBR: true
+                    }
                 },
                 messages: {
-                    'frases': 'Informe seu nome completo'
+                    'sitebundle_voto[nome]': 'Informe seu nome completo',
+                    'sitebundle_voto[cpf]': {
+                        required: 'Informe seu CPF',
+                        cpfBR: 'Informe um CPF válido'
+                    }
                 },
                 errorPlacement: function (error, element) {
 
@@ -131,6 +152,40 @@
                         error.insertAfter(element);
                     }
 
+                }
+            });
+            
+            $(window).load(function () {
+            $('#topo').css('width', $('#form-voto').width());
+            $('#topo img').css('width', $('#form-voto').width());
+        {#            $('#topo').css('height', 120);#}
+
+                $('#rounded').css('height', $('#row-form').height()*3);
+                
+                $('#rounded').css('top', $('#row-form').offset().top - 10);
+
+                {#if ($(window).width() < 1024) {
+                    $('#rounded').css('top', $('body').height() / 2 - $('#rounded').height() / 2);
+                } else {
+                    $('#rounded').css('top', $('#form-entrada').offset().top - 50);
+                }#}
+            });
+            
+            $('.linha-frase').click(function(){
+                
+                
+                
+                if($(this).hasClass('selecionada')){
+                    $(this).removeClass('selecionada');
+                    $('#id-frase').val(null);
+                } else{
+                    
+                    $('.linha-frase').each(function(i, e){
+                        $(e).removeClass('selecionada');
+                    });
+                    
+                    $(this).addClass('selecionada');
+                    $('#id-frase').val($(this).data('id'));
                 }
             });
 

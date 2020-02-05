@@ -21,22 +21,21 @@ class PageController extends Controller {
     
     public function votoAction() {
         
+        $voto = new \SiteBundle\Entity\Voto();
+        
         $em = $this->getDoctrine()->getManager();
         
-        $entradas = $em->getRepository('SiteBundle:Entrada')->listarTodosParaVotacao();
+        $frases = $em->getRepository('SiteBundle:Frase')->listarTodos();
         
-        $user = $this->get('security.token_storage')->getToken()->getUser();
+        dump($frases);
         
-        $votoUsuario = null;
-        
-        if($user != 'anon.'){
-            $votoUsuario = $em->getRepository('SiteBundle:Voto')->checarVotoUsuario($user->getId());
-        }
+        $form = $this->createForm(\SiteBundle\Form\VotoType::class, $voto, [
+            'action' => '/processa-form'
+        ]);
 
         return $this->render('@Site/Page/voto.html.twig', [
-            "entradas" => $entradas,
-            "user" => $user,
-            "voto" => $votoUsuario
+            "frases" => $frases,
+            "form" => $form->createView()
         ]);
     }
 
@@ -102,24 +101,38 @@ class PageController extends Controller {
         $voto = new \SiteBundle\Entity\Voto();
         $em = $this->getDoctrine()->getManager();
         
-        $frase = $request->request->get("frases");
+        $dadosVoto = $request->request->get('sitebundle_voto');
+        $recaptcha = $request->request->get('g-recaptcha-response');
+        $idFrase = $request->request->get('id-frase');
         
-        $entrada = $em->getRepository('SiteBundle:Entrada')
-                    ->findOneBy(array('id' => $frase));
-        
-        $user = $this->get('security.token_storage')->getToken()->getUser();
-        
-        if($entrada != null && $user != null){
-            $voto->setEntrada($entrada);
-            $voto->setUsuario($user);
+        $nome = $dadosVoto['nome'];
+        $cpf = $dadosVoto['cpf'];
 
-            $em->persist($voto);
-            $em->flush();
-            
-            return new \Symfony\Component\HttpFoundation\Response('0');
+        
+        $frase = $em->getRepository('SiteBundle:Frase')
+                    ->findOneBy(array('id' => $idFrase));
+        
+        $votoCpf = $em->getRepository('SiteBundle:Voto')
+                    ->findOneBy(array('cpf' => $cpf));
+        
+        if($votoCpf == null){
+            if($frase != null /*&& $this->validaCPF($cpf)*/){
+                $voto->setFrase($frase);
+                $voto->setCpf($cpf);
+                $voto->setNome($nome);
+
+                $em->persist($voto);
+                $em->flush();
+
+                return new \Symfony\Component\HttpFoundation\Response('0');
+            }
+        } else{
+            return new \Symfony\Component\HttpFoundation\Response('O CPF informado já votou. Só é permitido um voto por CPF.');
         }
+        
+        
 
-        return new \Symfony\Component\HttpFoundation\Response('Por favor preencha todos os dados solicitados.');
+        return new \Symfony\Component\HttpFoundation\Response('Por favor preencha corretamente todos os dados solicitados.');
     }
 
     function validaCPF($cpf = null) {
@@ -191,6 +204,23 @@ class PageController extends Controller {
         
                         //->setBody($form->get('mensagem')->getData());
                 $this->get('mailer')->send($email);
+    }
+    
+    # get success response from recaptcha and return it to controller
+    function captchaverify($recaptcha){
+            $url = "https://www.google.com/recaptcha/api/siteverify";
+            $ch = curl_init();
+            curl_setopt($ch, CURLOPT_URL, $url);
+            curl_setopt($ch, CURLOPT_HEADER, 0);
+            curl_setopt($ch, CURLOPT_RETURNTRANSFER, TRUE); 
+            curl_setopt($ch, CURLOPT_POST, true);
+            curl_setopt($ch, CURLOPT_POSTFIELDS, array(
+                "secret"=>"6Lf3stUUAAAAALfQuLk0XFcNSShRmY-pw0HY5R24","response"=>$recaptcha));
+            $response = curl_exec($ch);
+            curl_close($ch);
+            $data = json_decode($response);     
+        
+        return $data->success;        
     }
     
 }
