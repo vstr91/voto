@@ -51,7 +51,8 @@
                             </div>
                         </div>
                             
-                        <div class="g-recaptcha" data-sitekey="6Lf3stUUAAAAAPbMx8YHOcuAbX1F7_5Y83F8le0p"></div>
+                        <div class="g-recaptcha" data-sitekey="6Lf3stUUAAAAAPbMx8YHOcuAbX1F7_5Y83F8le0p" data-callback="recaptchaCallback"></div>
+                        <input type="hidden" class="hiddenRecaptcha required" name="hiddenRecaptcha" id="hiddenRecaptcha">
                             
                         {{ form_end(form) }}
                     </form>
@@ -89,6 +90,7 @@
             $('.cpf').mask('000.000.000-00', {reverse: true});
 
             $('#form-voto').validate({
+                ignore: ".ignore",
                 submitHandler: function (form) {
                     
                     var cont = 0;
@@ -135,6 +137,15 @@
                     'sitebundle_voto[cpf]': {
                         required: true//,
                         //cpfBR: true
+                    },
+                    hiddenRecaptcha: {
+                        required: function () {
+                            if (grecaptcha.getResponse() == '') {
+                                return true;
+                            } else {
+                                return false;
+                            }
+                        }
                     }
                 },
                 messages: {
@@ -142,7 +153,10 @@
                     'sitebundle_voto[cpf]': {
                         required: 'Informe seu CPF',
                         cpfBR: 'Informe um CPF válido'
-                    }
+                    },
+                    'hiddenRecaptcha': {
+                        required: 'Marque a verificação acima'
+                    } 
                 },
                 errorPlacement: function (error, element) {
 
@@ -190,5 +204,9 @@
             });
 
         });
+        
+        function recaptchaCallback() {
+            $('#hiddenRecaptcha').valid();
+        };
     </script>
 {% endblock javascripts %}

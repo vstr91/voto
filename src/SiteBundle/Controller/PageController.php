@@ -27,8 +27,6 @@ class PageController extends Controller {
         
         $frases = $em->getRepository('SiteBundle:Frase')->listarTodos();
         
-        dump($frases);
-        
         $form = $this->createForm(\SiteBundle\Form\VotoType::class, $voto, [
             'action' => '/processa-form'
         ]);
@@ -105,34 +103,41 @@ class PageController extends Controller {
         $recaptcha = $request->request->get('g-recaptcha-response');
         $idFrase = $request->request->get('id-frase');
         
-        $nome = $dadosVoto['nome'];
-        $cpf = $dadosVoto['cpf'];
-
-        
-        $frase = $em->getRepository('SiteBundle:Frase')
-                    ->findOneBy(array('id' => $idFrase));
-        
-        $votoCpf = $em->getRepository('SiteBundle:Voto')
-                    ->findOneBy(array('cpf' => $cpf));
-        
-        if($votoCpf == null){
-            if($frase != null /*&& $this->validaCPF($cpf)*/){
-                $voto->setFrase($frase);
-                $voto->setCpf($cpf);
-                $voto->setNome($nome);
-
-                $em->persist($voto);
-                $em->flush();
-
-                return new \Symfony\Component\HttpFoundation\Response('0');
-            }
+        if(!$this->VerifyRecaptcha($recaptcha))
+        {
+            return new \Symfony\Component\HttpFoundation\Response('Erro ao validar o Captcha. Por favor tente novamente.');
         } else{
-            return new \Symfony\Component\HttpFoundation\Response('O CPF informado já votou. Só é permitido um voto por CPF.');
+            $nome = $dadosVoto['nome'];
+            $cpf = $dadosVoto['cpf'];
+
+
+            $frase = $em->getRepository('SiteBundle:Frase')
+                        ->findOneBy(array('id' => $idFrase));
+
+            $votoCpf = $em->getRepository('SiteBundle:Voto')
+                        ->findOneBy(array('cpf' => $cpf));
+
+            if($votoCpf == null){
+                if($frase != null /*&& $this->validaCPF($cpf)*/){
+                    $voto->setFrase($frase);
+                    $voto->setCpf($cpf);
+                    $voto->setNome($nome);
+
+                    $em->persist($voto);
+                    $em->flush();
+
+                    return new \Symfony\Component\HttpFoundation\Response('0');
+                }
+            } else{
+                return new \Symfony\Component\HttpFoundation\Response('O CPF informado já votou. Só é permitido um voto por CPF.');
+            }
+
+
+
+            return new \Symfony\Component\HttpFoundation\Response('Por favor preencha corretamente todos os dados solicitados.');
         }
         
         
-
-        return new \Symfony\Component\HttpFoundation\Response('Por favor preencha corretamente todos os dados solicitados.');
     }
 
     function validaCPF($cpf = null) {
@@ -206,21 +211,28 @@ class PageController extends Controller {
                 $this->get('mailer')->send($email);
     }
     
-    # get success response from recaptcha and return it to controller
-    function captchaverify($recaptcha){
-            $url = "https://www.google.com/recaptcha/api/siteverify";
-            $ch = curl_init();
-            curl_setopt($ch, CURLOPT_URL, $url);
-            curl_setopt($ch, CURLOPT_HEADER, 0);
-            curl_setopt($ch, CURLOPT_RETURNTRANSFER, TRUE); 
-            curl_setopt($ch, CURLOPT_POST, true);
-            curl_setopt($ch, CURLOPT_POSTFIELDS, array(
-                "secret"=>"6Lf3stUUAAAAALfQuLk0XFcNSShRmY-pw0HY5R24","response"=>$recaptcha));
-            $response = curl_exec($ch);
+    function VerifyRecaptcha($g_recaptcha_response) {
+        $ch = curl_init();
+        $curlConfig = array(
+            CURLOPT_URL            => "https://www.google.com/recaptcha/api/siteverify",
+            CURLOPT_POST           => true,
+            CURLOPT_RETURNTRANSFER => true,
+            CURLOPT_POSTFIELDS     => array(
+                'secret' => '6Lf3stUUAAAAALfQuLk0XFcNSShRmY-pw0HY5R24',
+                'response' => $g_recaptcha_response,
+                'remoteip' => 'www.gototoronto.com.br'#$_SERVER['REMOTE_ADDR']
+            )
+        );
+        curl_setopt_array($ch, $curlConfig);
+        if($result = curl_exec($ch)){
             curl_close($ch);
-            $data = json_decode($response);     
-        
-        return $data->success;        
+            $response = json_decode($result);
+            
+            return $response->success;
+        }else{
+            //dump(curl_error($ch)); // this for debug remove after you test it
+            return false;
+        }
     }
     
 }
