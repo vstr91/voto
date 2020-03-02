@@ -1,2 +1,10 @@
 [30-May-2019 14:39:14 America/Sao_Paulo] PHP Fatal error:  Cannot declare class SiteBundle\Controller\PageController, because the name is already in use in C:\xampp\htdocs\voto\src\SiteBundle\Controller\AdminController.php on line 17
 [30-May-2019 14:39:14 America/Sao_Paulo] PHP Fatal error:  Cannot declare class SiteBundle\Controller\PageController, because the name is already in use in C:\xampp\htdocs\voto\src\SiteBundle\Controller\AdminController.php on line 17
+[13-Feb-2020 09:37:50 America/Sao_Paulo] PHP Fatal error:  Uncaught Symfony\Component\Debug\Exception\ContextErrorException: Catchable Fatal Error: Object of class SiteBundle\Entity\Frase could not be converted to string in C:\xampp\htdocs\voto\src\SiteBundle\Controller\PageController.php:118
+Stack trace:
+#0 C:\xampp\htdocs\voto\vendor\symfony\symfony\src\Symfony\Component\HttpKernel\HttpKernel.php(151): SiteBundle\Controller\PageController->processaVotoAction(Object(Symfony\Component\HttpFoundation\Request))
+#1 C:\xampp\htdocs\voto\vendor\symfony\symfony\src\Symfony\Component\HttpKernel\HttpKernel.php(68): Symfony\Component\HttpKernel\HttpKernel->handleRaw(Object(Symfony\Component\HttpFoundation\Request), 1)
+#2 C:\xampp\htdocs\voto\vendor\symfony\symfony\src\Symfony\Component\HttpKernel\Kernel.php(200): Symfony\Component\HttpKernel\HttpKernel->handle(Object(Symfony\Component\HttpFoundation\Request), 1, true)
+#3 C:\xampp\htdocs\voto\web\app_dev.php(29): Symfony\Component\HttpKernel\Kernel->handle(Object(Symfony\Component\HttpFoundation\Request))
+#4 {main}
+  thrown in C:\xampp\htdocs\voto\src\SiteBundle\Controller\PageController.php on line 118

@@ -1,61 +1,88 @@
 {% extends "base.html.twig" %}
 {% block body %}
     <div id="rounded" style="background-color: #9933cc; border-radius: 0 800px 800px 0; 
-         height: 10%; max-height: 80%; width: 80%; position: absolute; 
+         height: 10%; width: 80%; position: absolute; 
          left: 0; margin-bottom: 50px;"></div>
     <div class="container">
         <div class="row">
             <div id="topo" class="col-md-8 offset-2" style="height: auto; margin-top: 30px; margin-bottom: 30px">
-{#                <img src="{{ asset('imagens/topo.png') }}" />#}
+                <img src="{{ asset('imagens/topo-voto.png') }}" />
             </div>
         </div>
         <div class="row" id="row-form">
             <div class="col-md-8 col-10 col-sm-10 offset-md-2 offset-1 offset-sm-1">
                 {% if date("now"|date('Y-m-d')) >= date('2020-02-01'|date('Y-m-d')) %}
-                    
-                    {% for f in frases %}
-                        <div class="linha-frase" data-id="{{ f.id }}">
-                            <h5>Autor(a): {{ f.autor }}<br />
-                            Filial: {{ f.filial }}</h5>
 
-                            <div class="form-voto card card-voto">
-                                <p>{{ f.frase|raw }}</p>
+                    {% for f in frases %}
+                        <div class="row linha-frase" data-id="{{ f.id }}">
+                            <div class="col-lg-2 col-xl-2 col-md-12 col-sm-12 col-xs-12">
+                                <a href="#" class="btn btn-primary btn-selecionar" 
+                                    data-id="{{ f.id }}">Selecionar</a>
                             </div>
-                            <div>{{ f.votos }} voto(s)</div>
+                            <div class="col-lg-10 col-xl-10 col-md-12 col-sm-12 col-xs-12">
+                                <h5>Autor(a): {{ f.autor }}<br />
+                                    Filial: {{ f.filial }}</h5>
+
+                                <div class="form-voto card card-voto">
+                                    <p id="frase">{{ f.frase|raw }}</p>
+                                </div>
+                                <div><b>{{ f.votos }} voto(s)</b></div>
+                            </div>
+
                         </div>
                         <br />
                     {% endfor %}
-                    
-                    <form name="form-voto" id="form-voto" method="POST" 
-                          action="{{ path('site_processa_voto') }}">
-                        <div class="my-custom-class-for-errors">
-                            {{ form_errors(form) }}
-                        </div>
-                        
-                        <div class="row">
-                            <div class="col-12 text-center text-bold">
-                                <p>Por favor informe seus dados para votar!</p>
-                            </div>
-                        </div>
 
-                        <div class="row">
-                            <div class="col-md-6 col-12 col-sm-12">
-                                {{ form_widget(form.nome, {'attr': {'placeholder': 'NOME COMPLETO'}}) }}
-                            </div>
-                            <div class="col-md-4 col-12 col-sm-12">
-                                {{ form_widget(form.cpf, {'attr': {'placeholder': 'CPF'}}) }}
-                            </div>
-                            <div class="col-md-2 col-12 col-sm-12">
-                                <input type="hidden" name="id-frase" id="id-frase" />
-                                <input type="submit" value="VOTAR" class="btn float-right form-voto" id="btn-votar" />
+                    <div class="modal fade" tabindex="-1" role="dialog">
+                        <div class="modal-dialog modal-lg" role="document">
+                            <div class="modal-content" style="background: #9933cc">
+                                <div class="modal-body">
+                                    <form name="form-voto" id="form-voto" method="POST"
+                                          action="{{ path('site_processa_voto') }}">
+                                        <div class="my-custom-class-for-errors">
+                                            {{ form_errors(form) }}
+                                        </div>
+                                        
+                                        <div class="row">
+                                            <div class="col-12" id="div-frase">
+                                                
+                                            </div>
+                                        </div>
+
+                                        <div class="row">
+                                            <div class="col-12 text-center text-bold">
+                                                <p>Por favor informe seus dados para votar!</p>
+                                            </div>
+                                        </div>
+
+                                        <div class="row">
+                                            <div class="col-md-6 col-12 col-sm-12">
+                                                {{ form_widget(form.nome, {'attr': {'placeholder': 'NOME COMPLETO'}}) }}
+                                            </div>
+                                            <div class="col-md-4 col-12 col-sm-12">
+                                                {{ form_widget(form.cpf, {'attr': {'placeholder': 'CPF'}}) }}
+                                            </div>
+                                            <div class="col-md-2 col-12 col-sm-12">
+                                                <input type="hidden" name="id-frase" id="id-frase" />
+                                                <input type="submit" value="VOTAR" class="btn float-right form-voto" id="btn-votar" />
+                                            </div>
+                                        </div>
+                                        <br />    
+                                        <div class="g-recaptcha" data-sitekey="6Lf3stUUAAAAAPbMx8YHOcuAbX1F7_5Y83F8le0p" data-callback="recaptchaCallback"></div>
+                                        <input type="hidden" class="hiddenRecaptcha required" 
+                                               name="hiddenRecaptcha" id="hiddenRecaptcha">
+
+                                        {{ form_end(form) }}
+                                    </form>
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-secondary" id="btn-fechar"
+                                            data-dismiss="modal">Escolher Outra Frase</button>
+                                </div>
                             </div>
                         </div>
-                            
-                        <div class="g-recaptcha" data-sitekey="6Lf3stUUAAAAAPbMx8YHOcuAbX1F7_5Y83F8le0p" data-callback="recaptchaCallback"></div>
-                        <input type="hidden" class="hiddenRecaptcha required" name="hiddenRecaptcha" id="hiddenRecaptcha">
-                            
-                        {{ form_end(form) }}
-                    </form>
+                    </div>
+
                 {% else %}
                     <p>A vota&ccedil;&atilde;o ainda n&atilde;o foi iniciada...</p>
                 {% endif %}
@@ -92,22 +119,22 @@
             $('#form-voto').validate({
                 ignore: ".ignore",
                 submitHandler: function (form) {
-                    
-                    var cont = 0;
-                
-                    $('.linha-frase').each(function(i, e){
 
-                        if($(e).hasClass('selecionada')){
+                    var cont = 0;
+
+                    $('.linha-frase').each(function (i, e) {
+
+                        if ($(e).hasClass('selecionada')) {
                             cont++;
                         }
 
                     });
 
-                    if(cont == 0){
+                    if (cont == 0) {
                         alert("Por favor selecione uma frase!");
-                    } else if(cont > 1){
+                    } else if (cont > 1) {
                         alert("Apenas uma frase pode ser selecionada!");
-                    } else{
+                    } else {
                         $('#btn-votar').attr('disabled', 'disabled');
                         $('#btn-votar').val("...");
 
@@ -126,7 +153,7 @@
 
                             }
                         });
-                        
+
                     }
 
                     return false;
@@ -135,8 +162,8 @@
                 rules: {
                     'sitebundle_voto[nome]': 'required',
                     'sitebundle_voto[cpf]': {
-                        required: true//,
-                        //cpfBR: true
+                        required: true,
+                        cpfBR: true
                     },
                     hiddenRecaptcha: {
                         required: function () {
@@ -156,7 +183,7 @@
                     },
                     'hiddenRecaptcha': {
                         required: 'Marque a verificação acima'
-                    } 
+                    }
                 },
                 errorPlacement: function (error, element) {
 
@@ -168,45 +195,99 @@
 
                 }
             });
-            
+
             $(window).load(function () {
-            $('#topo').css('width', $('#form-voto').width());
-            $('#topo img').css('width', $('#form-voto').width());
+                $('#topo').css('width', $('.linha-frase').width());
+                $('#topo img').css('width', $('.linha-frase').width());
         {#            $('#topo').css('height', 120);#}
 
-                $('#rounded').css('height', $('#row-form').height()*3);
-                
-                $('#rounded').css('top', $('#row-form').offset().top - 10);
+                    $('#rounded').css('height', $('#row-form').height() * 1.1);
 
-                {#if ($(window).width() < 1024) {
-                    $('#rounded').css('top', $('body').height() / 2 - $('#rounded').height() / 2);
-                } else {
-                    $('#rounded').css('top', $('#form-entrada').offset().top - 50);
-                }#}
-            });
-            
-            $('.linha-frase').click(function(){
+                    $('#rounded').css('top', $('#row-form').offset().top - 10);
+
+        {#if ($(window).width() < 1024) {
+            $('#rounded').css('top', $('body').height() / 2 - $('#rounded').height() / 2);
+        } else {
+            $('#rounded').css('top', $('#form-entrada').offset().top - 50);
+        }#}
+                });
                 
-                
-                
-                if($(this).hasClass('selecionada')){
-                    $(this).removeClass('selecionada');
-                    $('#id-frase').val(null);
-                } else{
+                $('#btn-fechar').click(function () {
                     
-                    $('.linha-frase').each(function(i, e){
+                    $('.linha-frase').each(function (i, e) {
                         $(e).removeClass('selecionada');
                     });
+
+                    $('.btn-selecionar').each(function (i, e) {
+                        $(e).removeClass('btn-selecionado');
+                        $(e).text("Selecionar");
+                    });
                     
-                    $(this).addClass('selecionada');
-                    $('#id-frase').val($(this).data('id'));
-                }
+                    $('#id-frase').val(null);
+                    
+                });
+
+                $('.btn-selecionar').click(function () {
+
+                    if ($(this).parent().parent().hasClass('selecionada')) {
+                        $(this).parent().parent().removeClass('selecionada');
+                        $(this).removeClass('btn-selecionado');
+                        $('#id-frase').val(null);
+                        $(this).text("Selecionar");
+                    } else {
+
+                        $('.linha-frase').each(function (i, e) {
+                            $(e).removeClass('selecionada');
+                        });
+
+                        $('.btn-selecionar').each(function (i, e) {
+                            $(e).removeClass('btn-selecionado');
+                            $(e).text("Selecionar");
+                        });
+
+                        $(this).parent().parent().addClass('selecionada');
+                        $(this).text("Selecionada");
+                        $(this).addClass('btn-selecionado');
+                        
+{#                        $('#div-frase').html($(this).parent().parent().parent().children('#frase').html());#}
+
+                        $('.modal').modal({backdrop: 'static', keyboard: false}).modal('show');
+                        
+                        $('#id-frase').val($(this).data('id'));
+
+                    }
+                    
+                    return false;
+
+                });
+
+                {#$('.linha-frase').click(function () {
+
+
+
+                    if ($(this).hasClass('selecionada')) {
+                        $(this).removeClass('selecionada');
+                        $('#id-frase').val(null);
+                    } else {
+
+                        $('.linha-frase').each(function (i, e) {
+                            $(e).removeClass('selecionada');
+                        });
+
+                        $(this).addClass('selecionada');
+                        $('#id-frase').val($(this).data('id'));
+                    }
+
+                    //$('html, body').animate({ scrollTop: $("#sitebundle_voto_nome").offset().top-100}, 1000);
+
+
+                });#}
+
             });
 
-        });
-        
-        function recaptchaCallback() {
-            $('#hiddenRecaptcha').valid();
-        };
+            function recaptchaCallback() {
+                $('#hiddenRecaptcha').valid();
+            }
+            ;
     </script>
 {% endblock javascripts %}

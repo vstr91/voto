@@ -103,14 +103,13 @@ class PageController extends Controller {
         $recaptcha = $request->request->get('g-recaptcha-response');
         $idFrase = $request->request->get('id-frase');
         
-        dump($request->request);
-        
         if(!$this->VerifyRecaptcha($recaptcha))
         {
             return new \Symfony\Component\HttpFoundation\Response('Erro ao validar o Captcha. Por favor tente novamente.');
         } else{
             $nome = $dadosVoto['nome'];
             $cpf = $dadosVoto['cpf'];
+
 
             $frase = $em->getRepository('SiteBundle:Frase')
                         ->findOneBy(array('id' => $idFrase));
@@ -119,7 +118,7 @@ class PageController extends Controller {
                         ->findOneBy(array('cpf' => $cpf));
 
             if($votoCpf == null){
-                if($frase != null && $this->validaCPF($cpf)){
+                if($frase != null /*&& $this->validaCPF($cpf)*/){
                     $voto->setFrase($frase);
                     $voto->setCpf($cpf);
                     $voto->setNome($nome);
@@ -128,8 +127,6 @@ class PageController extends Controller {
                     $em->flush();
 
                     return new \Symfony\Component\HttpFoundation\Response('0');
-                } else{
-                    return new \Symfony\Component\HttpFoundation\Response('O CPF informado é inválido. Por favor informe um CPF válido.');
                 }
             } else{
                 return new \Symfony\Component\HttpFoundation\Response('O CPF informado já votou. Só é permitido um voto por CPF.');

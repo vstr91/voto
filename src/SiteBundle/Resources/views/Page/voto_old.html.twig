@@ -1,0 +1,212 @@
+{% extends "base.html.twig" %}
+{% block body %}
+    <div id="rounded" style="background-color: #9933cc; border-radius: 0 800px 800px 0; 
+         height: 10%; max-height: 80%; width: 80%; position: absolute; 
+         left: 0; margin-bottom: 50px;"></div>
+    <div class="container">
+        <div class="row">
+            <div id="topo" class="col-md-8 offset-2" style="height: auto; margin-top: 30px; margin-bottom: 30px">
+{#                <img src="{{ asset('imagens/topo.png') }}" />#}
+            </div>
+        </div>
+        <div class="row" id="row-form">
+            <div class="col-md-8 col-10 col-sm-10 offset-md-2 offset-1 offset-sm-1">
+                {% if date("now"|date('Y-m-d')) >= date('2020-02-01'|date('Y-m-d')) %}
+                    
+                    {% for f in frases %}
+                        <div class="linha-frase" data-id="{{ f.id }}">
+                            <h5>Autor(a): {{ f.autor }}<br />
+                            Filial: {{ f.filial }}</h5>
+
+                            <div class="form-voto card card-voto">
+                                <p>{{ f.frase|raw }}</p>
+                            </div>
+                            <div>{{ f.votos }} voto(s)</div>
+                        </div>
+                        <br />
+                    {% endfor %}
+                    
+                    <form name="form-voto" id="form-voto" method="POST" 
+                          action="{{ path('site_processa_voto') }}">
+                        <div class="my-custom-class-for-errors">
+                            {{ form_errors(form) }}
+                        </div>
+                        
+                        <div class="row">
+                            <div class="col-12 text-center text-bold">
+                                <p>Por favor informe seus dados para votar!</p>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-6 col-12 col-sm-12">
+                                {{ form_widget(form.nome, {'attr': {'placeholder': 'NOME COMPLETO'}}) }}
+                            </div>
+                            <div class="col-md-4 col-12 col-sm-12">
+                                {{ form_widget(form.cpf, {'attr': {'placeholder': 'CPF'}}) }}
+                            </div>
+                            <div class="col-md-2 col-12 col-sm-12">
+                                <input type="hidden" name="id-frase" id="id-frase" />
+                                <input type="submit" value="VOTAR" class="btn float-right form-voto" id="btn-votar" />
+                            </div>
+                        </div>
+                            
+                        <div class="g-recaptcha" data-sitekey="6Lf3stUUAAAAAPbMx8YHOcuAbX1F7_5Y83F8le0p" data-callback="recaptchaCallback"></div>
+                        <input type="hidden" class="hiddenRecaptcha required" name="hiddenRecaptcha" id="hiddenRecaptcha">
+                            
+                        {{ form_end(form) }}
+                    </form>
+                {% else %}
+                    <p>A vota&ccedil;&atilde;o ainda n&atilde;o foi iniciada...</p>
+                {% endif %}
+
+            </div>
+        </div>
+    </div>
+{% endblock body %}
+{% block javascripts %}
+    {{ parent() }}
+    <link rel="stylesheet" href="{{ asset('css/estilos.css') }}" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.8.0/css/bootstrap-datepicker.css" />
+    <script type="text/javascript" src="{{ asset('js/jquery.mask.min.js') }}"></script>
+    <script type="text/javascript" src="{{ asset('js/jquery.form.min.js') }}"></script>
+    <script type="text/javascript" src="{{ asset('js/jquery.validate.min.js') }}"></script>
+    <script type="text/javascript" src="{{ asset('js/additional-methods.min.js') }}"></script>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.8.0/js/bootstrap-datepicker.min.js"></script>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.8.0/locales/bootstrap-datepicker.pt-BR.min.js"></script>
+    <script src="https://www.google.com/recaptcha/api.js" async defer></script>
+
+    <script>
+        var SPMaskBehavior = function (val) {
+            return val.replace(/\D/g, '').length === 11 ? '(00) 00000-0000' : '(00) 0000-00009';
+        },
+                spOptions = {
+                    onKeyPress: function (val, e, field, options) {
+                        field.mask(SPMaskBehavior.apply({}, arguments), options);
+                    }
+                };
+
+        $(document).ready(function () {
+            $('.cpf').mask('000.000.000-00', {reverse: true});
+
+            $('#form-voto').validate({
+                ignore: ".ignore",
+                submitHandler: function (form) {
+                    
+                    var cont = 0;
+                
+                    $('.linha-frase').each(function(i, e){
+
+                        if($(e).hasClass('selecionada')){
+                            cont++;
+                        }
+
+                    });
+
+                    if(cont == 0){
+                        alert("Por favor selecione uma frase!");
+                    } else if(cont > 1){
+                        alert("Apenas uma frase pode ser selecionada!");
+                    } else{
+                        $('#btn-votar').attr('disabled', 'disabled');
+                        $('#btn-votar').val("...");
+
+                        $(form).ajaxSubmit({
+                            success: function (response, status, xhr, form) {
+
+                                if (response == '0') {
+                                    alert('Voto computado com sucesso!');
+                                    location.reload();
+                                } else {
+                                    alert(response);
+                                }
+
+                                $('#btn-votar').removeAttr('disabled');
+                                $('#btn-votar').val("VOTAR");
+
+                            }
+                        });
+                        
+                    }
+
+                    return false;
+
+                },
+                rules: {
+                    'sitebundle_voto[nome]': 'required',
+                    'sitebundle_voto[cpf]': {
+                        required: true//,
+                        //cpfBR: true
+                    },
+                    hiddenRecaptcha: {
+                        required: function () {
+                            if (grecaptcha.getResponse() == '') {
+                                return true;
+                            } else {
+                                return false;
+                            }
+                        }
+                    }
+                },
+                messages: {
+                    'sitebundle_voto[nome]': 'Informe seu nome completo',
+                    'sitebundle_voto[cpf]': {
+                        required: 'Informe seu CPF',
+                        cpfBR: 'Informe um CPF válido'
+                    },
+                    'hiddenRecaptcha': {
+                        required: 'Marque a verificação acima'
+                    } 
+                },
+                errorPlacement: function (error, element) {
+
+                    if (element.attr("name") == "frases") {
+                        $("#erroCheck").text("Por favor escolha uma frase acima!");
+                    } else {
+                        error.insertAfter(element);
+                    }
+
+                }
+            });
+            
+            $(window).load(function () {
+            $('#topo').css('width', $('#form-voto').width());
+            $('#topo img').css('width', $('#form-voto').width());
+        {#            $('#topo').css('height', 120);#}
+
+                $('#rounded').css('height', $('#row-form').height()*3);
+                
+                $('#rounded').css('top', $('#row-form').offset().top - 10);
+
+                {#if ($(window).width() < 1024) {
+                    $('#rounded').css('top', $('body').height() / 2 - $('#rounded').height() / 2);
+                } else {
+                    $('#rounded').css('top', $('#form-entrada').offset().top - 50);
+                }#}
+            });
+            
+            $('.linha-frase').click(function(){
+                
+                
+                
+                if($(this).hasClass('selecionada')){
+                    $(this).removeClass('selecionada');
+                    $('#id-frase').val(null);
+                } else{
+                    
+                    $('.linha-frase').each(function(i, e){
+                        $(e).removeClass('selecionada');
+                    });
+                    
+                    $(this).addClass('selecionada');
+                    $('#id-frase').val($(this).data('id'));
+                }
+            });
+
+        });
+        
+        function recaptchaCallback() {
+            $('#hiddenRecaptcha').valid();
+        };
+    </script>
+{% endblock javascripts %}

@@ -13,6 +13,14 @@ site_admin_homepage:
 site_admin_filial_homepage:
     path:     /admin/{filial}/home
     defaults: { _controller: SiteBundle:Admin:indexFilial, filial: '' }
+    
+site_admin_carrega_votos:
+    path:     /carrega_votos/{frase}
+    defaults: { _controller: SiteBundle:Admin:carregaVotos, frase: '' }
+    
+site_admin_lista_corrida:
+    path:     /lista-corrida
+    defaults: { _controller: SiteBundle:Admin:listaCorrida }
 
 site_processa_formulario:
     path:     /processa-form

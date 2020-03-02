@@ -73,3 +73,8 @@ input.error, textarea.error, select.error{
     cursor: pointer;
     background-color: rgba(145, 190, 0, 0.5);
 }
+
+.btn-selecionado, .btn-selecionado:hover{
+    background-color: white;
+    color: blue;
+}

@@ -14,7 +14,7 @@ class FraseRepository extends \Doctrine\ORM\EntityRepository
     public function listarTodos($limite = null){
         $qb = $this->createQueryBuilder('f')
                 ->select('f.id, f.frase, f.autor, fi.nome AS filial, COUNT(v.id) AS votos')
-                ->innerJoin('SiteBundle:Voto', 'v', 'WITH', 'v.frase = f.id')
+                ->leftJoin('SiteBundle:Voto', 'v', 'WITH', 'v.frase = f.id')
                 ->innerJoin('SiteBundle:Filial', 'fi', 'WITH', 'f.filial = fi.id')
                 ->distinct()
                 ->groupBy('f')
@@ -27,5 +27,23 @@ class FraseRepository extends \Doctrine\ORM\EntityRepository
         return $qb->getQuery()->getResult();
         
     }
+    
+    public function listarTodosComVotos($limite = null){
+        $qb = $this->createQueryBuilder('f')
+                ->select('f.id, f.frase, f.autor, fi.nome AS filial, COUNT(v.id) AS votos')
+                ->leftJoin('SiteBundle:Voto', 'v', 'WITH', 'v.frase = f.id')
+                ->innerJoin('SiteBundle:Filial', 'fi', 'WITH', 'f.filial = fi.id')
+                ->distinct()
+                ->groupBy('f')
+                ->addOrderBy('votos', 'DESC');
+        
+        if(false == is_null($limite)){
+            $qb->setMaxResults($limite);
+        }
+        
+        return $qb->getQuery()->getResult();
+        
+    }
+    
     
 }

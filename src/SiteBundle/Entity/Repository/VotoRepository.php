@@ -25,4 +25,27 @@ class VotoRepository extends \Doctrine\ORM\EntityRepository
         
     }
     
+    public function listarTodosPorFrase($frase){
+        $qb = $this->createQueryBuilder('v')
+                ->select('v')
+                ->distinct()
+                ->where('v.frase = :frase')
+                ->setParameter('frase', $frase)
+                ->addOrderBy('v.dataCadastro', 'ASC');
+
+        return $qb->getQuery()->getResult();
+        
+    }
+    
+    public function listarTodosAgrupadoPorFrase(){
+        $qb = $this->createQueryBuilder('v')
+                ->select('v')
+                ->innerJoin('SiteBundle:Frase', 'f', 'WITH', 'v.frase = f.id')
+                ->distinct()
+                ->addOrderBy('f.autor', 'ASC');
+
+        return $qb->getQuery()->getResult();
+        
+    }
+    
 }
